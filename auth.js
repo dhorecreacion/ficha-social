@@ -4,7 +4,7 @@ import {
   signOut,
   onAuthStateChanged,
   setPersistence,
-  inMemoryPersistence
+  browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -54,9 +54,9 @@ boot();
 
 async function boot() {
   try {
-    await setPersistence(auth, inMemoryPersistence);
+    await setPersistence(auth, browserSessionPersistence);
   } catch (error) {
-    console.error("No se pudo configurar la persistencia en memoria:", error);
+    console.error("No se pudo configurar la persistencia de sesión:", error);
   }
 
   bindEvents();
@@ -68,13 +68,11 @@ async function boot() {
 ========================= */
 function setupAuthWatcher() {
   onAuthStateChanged(auth, async (user) => {
-    // Esperar primer estado
     if (!authReady) {
       authReady = true;
       return;
     }
 
-    // No intervenir mientras el login está en proceso
     if (loginInProgress || redirecting) return;
 
     const isAdminValidated = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
@@ -83,7 +81,6 @@ function setupAuthWatcher() {
 
     if (!user) return;
 
-    // ADMIN
     if (ADMIN_UIDS.has(user.uid)) {
       if (isAdminValidated) {
         redirecting = true;
@@ -91,12 +88,11 @@ function setupAuthWatcher() {
         return;
       }
 
-      // si hay usuario admin pero no una validación real en esta pestaña
       await safeFullSignOut();
+      clearAllSessionFlags();
       return;
     }
 
-    // COLABORADOR
     if (user.isAnonymous) {
       if (isWorkerValidated && colaboradorFichaId) {
         redirecting = true;
@@ -105,6 +101,7 @@ function setupAuthWatcher() {
       }
 
       await safeFullSignOut();
+      clearAllSessionFlags();
     }
   });
 }
@@ -254,6 +251,7 @@ async function handleWorkerLogin(e) {
   } catch (error) {
     console.error("Error en login colaborador:", error);
     await safeFullSignOut();
+    clearAllSessionFlags();
     setMsg("No se pudo validar el acceso. Intenta nuevamente.");
   } finally {
     loginInProgress = false;

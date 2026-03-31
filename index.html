@@ -1,385 +1,388 @@
-    <!DOCTYPE html>
-    <html class="light" lang="es">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <title>Ficha Social — Acceso</title>
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Ficha Social — Acceso</title>
 
-        <!-- conexiones -->
-        <link rel="dns-prefetch" href="https://www.gstatic.com">
-        <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-        <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-        <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
-        <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin>
+    <!-- conexiones -->
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin>
 
-        <!-- estilos globales -->
-        <link rel="stylesheet" href="style.css" />
+    <!-- estilos globales -->
+    <link rel="stylesheet" href="style.css" />
 
-        <!-- autenticación firebase -->
-        <script type="module" src="auth.js" defer></script>
+    <!-- autenticación firebase -->
+    <script type="module" src="auth.js" defer></script>
 
-        <!-- fuentes -->
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-            rel="stylesheet"
-        />
+    <!-- fuentes -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet"
+    />
 
-        <script id="tailwind-config">
-            tailwind.config = {
-                darkMode: "class",
-                theme: {
-                    extend: {
-                        colors: {
-                            "outline-variant":           "#bec8d2",
-                            "surface-container":         "#eaeef4",
-                            "surface-container-low":     "#f0f4fa",
-                            "surface-container-lowest":  "#ffffff",
-                            "surface-container-high":    "#e4e8ee",
-                            "surface-container-highest": "#dfe3e9",
-                            "surface":                   "#f6faff",
-                            "primary-fixed-dim":         "#8aceff",
-                            "secondary-container":       "#a9f77e",
-                            "on-primary-container":      "#004768",
-                            "on-surface":                "#171c20",
-                            "on-surface-variant":        "#3e4850",
-                            "on-primary":                "#ffffff",
-                            "primary":                   "#006491",
-                            "primary-container":         "#3cb9ff",
-                            "outline":                   "#6e7881",
-                            "error":                     "#ba1a1a",
-                        },
-                        fontFamily: {
-                            "headline": ["Manrope"],
-                            "body": ["Manrope"],
-                            "label": ["Inter"],
-                        },
-                        borderRadius: {
-                            "DEFAULT": "0.25rem",
-                            "lg": "0.5rem",
-                            "xl": "0.75rem",
-                            "full": "9999px",
-                        },
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "outline-variant":           "#bec8d2",
+                        "surface-container":         "#eaeef4",
+                        "surface-container-low":     "#f0f4fa",
+                        "surface-container-lowest":  "#ffffff",
+                        "surface-container-high":    "#e4e8ee",
+                        "surface-container-highest": "#dfe3e9",
+                        "surface":                   "#f6faff",
+                        "primary-fixed-dim":         "#8aceff",
+                        "secondary-container":       "#a9f77e",
+                        "on-primary-container":      "#004768",
+                        "on-surface":                "#171c20",
+                        "on-surface-variant":        "#3e4850",
+                        "on-primary":                "#ffffff",
+                        "primary":                   "#006491",
+                        "primary-container":         "#3cb9ff",
+                        "outline":                   "#6e7881",
+                        "error":                     "#ba1a1a",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
                     },
                 },
-            };
-        </script>
+            },
+        };
+    </script>
 
-        <style>
-            html {
-                font-size: 80%;
-            }
+    <style>
+        html {
+            font-size: 80%;
+        }
 
-            body {
-                min-height: 100vh;
-            }
+        body {
+            min-height: 100vh;
+        }
 
-            .material-symbols-outlined {
-                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
 
-            .btn-gradient {
-                background: linear-gradient(135deg, #006491 0%, #3cb9ff 100%);
-            }
+        .btn-gradient {
+            background: linear-gradient(135deg, #006491 0%, #3cb9ff 100%);
+        }
 
-            .soft-shadow {
-                box-shadow: 0 10px 40px rgba(23, 28, 32, 0.06);
-            }
+        .soft-shadow {
+            box-shadow: 0 10px 40px rgba(23, 28, 32, 0.06);
+        }
 
-            #panelAdmin,
-            #panelWorker {
-                transition: opacity 0.2s ease, transform 0.2s ease;
-            }
+        #panelAdmin,
+        #panelWorker {
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
 
-            .login-shell {
-                position: relative;
-                isolation: isolate;
-            }
+        .login-shell {
+            position: relative;
+            isolation: isolate;
+        }
 
-            .login-card {
-                backdrop-filter: blur(6px);
-            }
-        </style>
-    </head>
+        .login-card {
+            backdrop-filter: blur(6px);
+        }
+    </style>
+</head>
 
-    <body class="bg-surface font-body text-on-surface flex flex-col">
+<body class="bg-surface font-body text-on-surface flex flex-col">
 
-        <main class="flex-grow flex items-center justify-center px-4 py-8 relative overflow-hidden">
+    <main class="flex-grow flex items-center justify-center px-4 py-8 relative overflow-hidden">
 
-            <!-- fondos -->
-            <div class="absolute top-[-10%] left-[-5%] w-[320px] h-[320px] bg-[#8aceff]/20 rounded-full blur-[90px] -z-10"></div>
-            <div class="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#a9f77e]/20 rounded-full blur-[100px] -z-10"></div>
+        <!-- fondos -->
+        <div class="absolute top-[-10%] left-[-5%] w-[320px] h-[320px] bg-[#8aceff]/20 rounded-full blur-[90px] -z-10"></div>
+        <div class="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#a9f77e]/20 rounded-full blur-[100px] -z-10"></div>
 
-            <div class="login-shell w-full max-w-[340px]">
+        <div class="login-shell w-full max-w-[340px]">
 
-                <!-- encabezado -->
-                <div class="flex flex-col items-center mb-7">
-                    <div class="mb-4 p-3 rounded-full bg-surface-container-lowest soft-shadow">
-                        <img src="./logo-dho.png" alt="Bienestar Social" class="h-14 w-14 object-contain" />
-                    </div>
-
-                    <h1 class="font-headline text-3xl font-bold text-on-surface tracking-tight text-center leading-snug">
-                        Acceso a <br>
-                        <span class="text-primary">Bienestar Social</span>
-                    </h1>
-
-                    <p class="mt-2 font-body text-sm text-on-surface-variant text-center px-4 leading-relaxed">
-                        Selecciona tu tipo de acceso e ingresa tu información para continuar.
-                    </p>
+            <!-- encabezado -->
+            <div class="flex flex-col items-center mb-7">
+                <div class="mb-4 p-3 rounded-full bg-surface-container-lowest soft-shadow">
+                    <img src="./logo-dho.png" alt="Bienestar Social" class="h-14 w-14 object-contain" />
                 </div>
 
-                <!-- tarjeta -->
-                <div class="login-card bg-surface-container-lowest px-6 py-7 md:px-7 md:py-8 rounded-xl soft-shadow border border-outline-variant/10">
+                <h1 class="font-headline text-3xl font-bold text-on-surface tracking-tight text-center leading-snug">
+                    Acceso a <br>
+                    <span class="text-primary">Bienestar Social</span>
+                </h1>
 
-                    <!-- tabs -->
-                    <div class="flex rounded-lg bg-surface-container p-1 mb-6 gap-1">
-                        <button
-                            id="tabAdmin"
-                            type="button"
-                            class="flex-1 py-2 px-3 rounded-md text-sm font-label transition-all duration-200 bg-surface-container-lowest text-primary font-semibold"
-                        >
-                            Administrador
-                        </button>
+                <p class="mt-2 font-body text-sm text-on-surface-variant text-center px-4 leading-relaxed">
+                    Selecciona tu tipo de acceso e ingresa tu información para continuar.
+                </p>
+            </div>
 
-                        <button
-                            id="tabWorker"
-                            type="button"
-                            class="flex-1 py-2 px-3 rounded-md text-sm font-label transition-all duration-200 text-on-surface-variant"
-                        >
-                            Colaborador
-                        </button>
-                    </div>
+            <!-- tarjeta -->
+            <div class="login-card bg-surface-container-lowest px-6 py-7 md:px-7 md:py-8 rounded-xl soft-shadow border border-outline-variant/10">
 
-                    <!-- admin -->
-                    <div id="panelAdmin">
-                        <form id="loginForm" autocomplete="on" class="space-y-5">
+                <!-- tabs -->
+                <div class="flex rounded-lg bg-surface-container p-1 mb-6 gap-1">
+                    <button
+                        id="tabWorker"
+                        type="button"
+                        class="flex-1 py-2 px-3 rounded-md text-sm font-label transition-all duration-200 bg-surface-container-lowest text-primary font-semibold"
+                    >
+                        Colaborador
+                    </button>
 
-                            <div class="space-y-1.5">
-                                <label class="font-label text-sm font-semibold text-on-surface ml-1" for="email">
-                                    Correo corporativo
-                                </label>
-                                <div class="relative">
-                                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
-                                        person
-                                    </span>
-                                    <input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        placeholder="usuario@empresa.com"
-                                        autocomplete="username"
-                                        inputmode="email"
-                                        autocapitalize="off"
-                                        autocorrect="off"
-                                        spellcheck="false"
-                                        required
-                                        class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
-                                            focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
-                                            transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="space-y-1.5">
-                                <label class="font-label text-sm font-semibold text-on-surface ml-1" for="password">
-                                    Contraseña
-                                </label>
-
-                                <div class="relative">
-                                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
-                                        lock
-                                    </span>
-                                    <input
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        placeholder="Ingresa tu contraseña"
-                                        autocomplete="current-password"
-                                        required
-                                        class="w-full pl-11 pr-11 py-2.5 bg-surface-container-highest border-none rounded-xl
-                                            focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
-                                            transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
-                                    />
-
-                                    <button
-                                        id="togglePass"
-                                        type="button"
-                                        aria-label="Mostrar contraseña"
-                                        aria-pressed="false"
-                                        title="Mostrar/Ocultar contraseña"
-                                        class="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors"
-                                    >
-                                        <svg id="iconEye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <button
-                                id="btnLogin"
-                                type="submit"
-                                class="w-full btn-gradient text-white py-3 rounded-full font-headline font-bold text-base tracking-wide
-                                    hover:opacity-90 active:scale-[0.98] transition-all duration-200 soft-shadow mt-3 disabled:opacity-70 disabled:cursor-not-allowed"
-                            >
-                                Iniciar sesión
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- colaborador -->
-                    <div id="panelWorker" class="hidden">
-                        <form id="workerForm" autocomplete="on" class="space-y-5">
-
-                            <div class="space-y-1.5">
-                                <label class="font-label text-sm font-semibold text-on-surface ml-1" for="workerEmail">
-                                    Correo registrado
-                                </label>
-                                <div class="relative">
-                                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
-                                        mail
-                                    </span>
-                                    <input
-                                        id="workerEmail"
-                                        name="workerEmail"
-                                        type="email"
-                                        placeholder="Ingresa tu correo registrado"
-                                        autocomplete="username"
-                                        inputmode="email"
-                                        autocapitalize="off"
-                                        autocorrect="off"
-                                        spellcheck="false"
-                                        class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
-                                            focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
-                                            transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="space-y-1.5">
-                                <label class="font-label text-sm font-semibold text-on-surface ml-1" for="workerDni">
-                                    DNI
-                                </label>
-                                <div class="relative">
-                                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
-                                        badge
-                                    </span>
-                                    <input
-                                        id="workerDni"
-                                        name="workerDni"
-                                        type="text"
-                                        inputmode="numeric"
-                                        maxlength="8"
-                                        placeholder="Ingresa tu DNI"
-                                        autocomplete="off"
-                                        autocapitalize="off"
-                                        autocorrect="off"
-                                        spellcheck="false"
-                                        class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
-                                            focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
-                                            transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
-                                    />
-                                </div>
-                            </div>
-
-                            <button
-                                id="btnWorkerLogin"
-                                type="submit"
-                                class="w-full btn-gradient text-white py-3 rounded-full font-headline font-bold text-base tracking-wide
-                                    hover:opacity-90 active:scale-[0.98] transition-all duration-200 soft-shadow mt-3 disabled:opacity-70 disabled:cursor-not-allowed"
-                            >
-                                Continuar
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- mensaje -->
-                    <p id="msg" role="status" aria-live="polite"
-                    class="mt-3 text-center text-sm font-label text-error min-h-[1.2rem]"></p>
+                    <button
+                        id="tabAdmin"
+                        type="button"
+                        class="flex-1 py-2 px-3 rounded-md text-sm font-label transition-all duration-200 text-on-surface-variant"
+                    >
+                        Administrador
+                    </button>
                 </div>
+
+                <!-- colaborador -->
+                <div id="panelWorker">
+                    <form id="workerForm" autocomplete="on" class="space-y-5">
+
+                        <div class="space-y-1.5">
+                            <label class="font-label text-sm font-semibold text-on-surface ml-1" for="workerEmail">
+                                Correo registrado
+                            </label>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
+                                    mail
+                                </span>
+                                <input
+                                    id="workerEmail"
+                                    name="workerEmail"
+                                    type="email"
+                                    placeholder="Ingresa tu correo registrado"
+                                    autocomplete="username"
+                                    inputmode="email"
+                                    autocapitalize="off"
+                                    autocorrect="off"
+                                    spellcheck="false"
+                                    class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
+                                        focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
+                                        transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="font-label text-sm font-semibold text-on-surface ml-1" for="workerDni">
+                                DNI
+                            </label>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
+                                    badge
+                                </span>
+                                <input
+                                    id="workerDni"
+                                    name="workerDni"
+                                    type="text"
+                                    inputmode="numeric"
+                                    maxlength="8"
+                                    placeholder="Ingresa tu DNI"
+                                    autocomplete="off"
+                                    autocapitalize="off"
+                                    autocorrect="off"
+                                    spellcheck="false"
+                                    class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
+                                        focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
+                                        transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            id="btnWorkerLogin"
+                            type="submit"
+                            class="w-full btn-gradient text-white py-3 rounded-full font-headline font-bold text-base tracking-wide
+                                hover:opacity-90 active:scale-[0.98] transition-all duration-200 soft-shadow mt-3 disabled:opacity-70 disabled:cursor-not-allowed"
+                        >
+                            Continuar
+                        </button>
+                    </form>
+                </div>
+
+                <!-- admin -->
+                <div id="panelAdmin" class="hidden">
+                    <form id="loginForm" autocomplete="on" class="space-y-5">
+
+                        <div class="space-y-1.5">
+                            <label class="font-label text-sm font-semibold text-on-surface ml-1" for="email">
+                                Correo corporativo
+                            </label>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
+                                    person
+                                </span>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="usuario@empresa.com"
+                                    autocomplete="username"
+                                    inputmode="email"
+                                    autocapitalize="off"
+                                    autocorrect="off"
+                                    spellcheck="false"
+                                    required
+                                    class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
+                                        focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
+                                        transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="font-label text-sm font-semibold text-on-surface ml-1" for="password">
+                                Contraseña
+                            </label>
+
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
+                                    lock
+                                </span>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Ingresa tu contraseña"
+                                    autocomplete="current-password"
+                                    required
+                                    class="w-full pl-11 pr-11 py-2.5 bg-surface-container-highest border-none rounded-xl
+                                        focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
+                                        transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
+                                />
+
+                                <button
+                                    id="togglePass"
+                                    type="button"
+                                    aria-label="Mostrar contraseña"
+                                    aria-pressed="false"
+                                    title="Mostrar/Ocultar contraseña"
+                                    class="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors"
+                                >
+                                    <svg id="iconEye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            id="btnLogin"
+                            type="submit"
+                            class="w-full btn-gradient text-white py-3 rounded-full font-headline font-bold text-base tracking-wide
+                                hover:opacity-90 active:scale-[0.98] transition-all duration-200 soft-shadow mt-3 disabled:opacity-70 disabled:cursor-not-allowed"
+                        >
+                            Iniciar sesión
+                        </button>
+                    </form>
+                </div>
+
+                <!-- mensaje -->
+                <p id="msg" role="status" aria-live="polite"
+                class="mt-3 text-center text-sm font-label text-error min-h-[1.2rem]"></p>
             </div>
-        </main>
+        </div>
+    </main>
 
-        <footer class="bg-[#f0f4fa] w-full flex flex-col md:flex-row justify-between items-center px-6 py-3 mt-auto text-center md:text-left">
-            <div class="font-label text-xs text-slate-500 mb-1 md:mb-0">
-                © 2026 Calidad de Vida - Dirección de Desarrollo Humano y Organizacional. Todos los derechos reservados.
-            </div>
-            <div class="font-label text-xs text-slate-400">
-                Sistema de ficha social
-            </div>
-        </footer>
+    <footer class="bg-[#f0f4fa] w-full flex flex-col md:flex-row justify-between items-center px-6 py-3 mt-auto text-center md:text-left">
+        <div class="font-label text-xs text-slate-500 mb-1 md:mb-0">
+            © 2026 Calidad de Vida - Dirección de Desarrollo Humano y Organizacional. Todos los derechos reservados.
+        </div>
+        <div class="font-label text-xs text-slate-400">
+            Sistema de ficha social
+        </div>
+    </footer>
 
-        <noscript>Activa JavaScript para usar la plataforma.</noscript>
+    <noscript>Activa JavaScript para usar la plataforma.</noscript>
 
-        <!-- mostrar/ocultar contraseña -->
-        <script>
-            const passEl = document.getElementById('password');
-            const toggleEl = document.getElementById('togglePass');
+    <!-- mostrar/ocultar contraseña -->
+    <script>
+        const passEl = document.getElementById('password');
+        const toggleEl = document.getElementById('togglePass');
 
-            const eyeSVG = `
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                </svg>
-            `;
+        const eyeSVG = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+        `;
 
-            const eyeOffSVG = `
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
-                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20C5 20 1 12 1 12a21.8 21.8 0 0 1 5.06-6.94"/>
-                    <path d="M10.58 10.58a3 3 0 1 0 4.24 4.24"/>
-                    <path d="M1 1l22 22"/>
-                </svg>
-            `;
+        const eyeOffSVG = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20C5 20 1 12 1 12a21.8 21.8 0 0 1 5.06-6.94"/>
+                <path d="M10.58 10.58a3 3 0 1 0 4.24 4.24"/>
+                <path d="M1 1l22 22"/>
+            </svg>
+        `;
 
-            toggleEl?.addEventListener('click', () => {
-                const showing = passEl.type === 'text';
-                passEl.type = showing ? 'password' : 'text';
-                toggleEl.setAttribute('aria-pressed', String(!showing));
-                toggleEl.innerHTML = showing ? eyeSVG : eyeOffSVG;
-                toggleEl.setAttribute('aria-label', showing ? 'Mostrar contraseña' : 'Ocultar contraseña');
-                passEl.focus();
-            });
-        </script>
+        toggleEl?.addEventListener('click', () => {
+            const showing = passEl.type === 'text';
+            passEl.type = showing ? 'password' : 'text';
+            toggleEl.setAttribute('aria-pressed', String(!showing));
+            toggleEl.innerHTML = showing ? eyeSVG : eyeOffSVG;
+            toggleEl.setAttribute('aria-label', showing ? 'Mostrar contraseña' : 'Ocultar contraseña');
+            passEl.focus();
+        });
+    </script>
 
-        <!-- tabs -->
-        <script>
-            const tabAdmin = document.getElementById("tabAdmin");
-            const tabWorker = document.getElementById("tabWorker");
-            const panelAdmin = document.getElementById("panelAdmin");
-            const panelWorker = document.getElementById("panelWorker");
-            const msg = document.getElementById("msg");
+    <!-- tabs -->
+    <script>
+        const tabAdmin = document.getElementById("tabAdmin");
+        const tabWorker = document.getElementById("tabWorker");
+        const panelAdmin = document.getElementById("panelAdmin");
+        const panelWorker = document.getElementById("panelWorker");
+        const msg = document.getElementById("msg");
 
-            function activateTab(tab) {
-                if (tab === "admin") {
-                    panelAdmin.classList.remove("hidden");
-                    panelWorker.classList.add("hidden");
+        function activateTab(tab) {
+            if (tab === "admin") {
+                panelAdmin.classList.remove("hidden");
+                panelWorker.classList.add("hidden");
 
-                    tabAdmin.classList.add("bg-surface-container-lowest", "text-primary", "font-semibold");
-                    tabAdmin.classList.remove("text-on-surface-variant");
+                tabAdmin.classList.add("bg-surface-container-lowest", "text-primary", "font-semibold");
+                tabAdmin.classList.remove("text-on-surface-variant");
 
-                    tabWorker.classList.remove("bg-surface-container-lowest", "text-primary", "font-semibold");
-                    tabWorker.classList.add("text-on-surface-variant");
-                } else {
-                    panelWorker.classList.remove("hidden");
-                    panelAdmin.classList.add("hidden");
+                tabWorker.classList.remove("bg-surface-container-lowest", "text-primary", "font-semibold");
+                tabWorker.classList.add("text-on-surface-variant");
+            } else {
+                panelWorker.classList.remove("hidden");
+                panelAdmin.classList.add("hidden");
 
-                    tabWorker.classList.add("bg-surface-container-lowest", "text-primary", "font-semibold");
-                    tabWorker.classList.remove("text-on-surface-variant");
+                tabWorker.classList.add("bg-surface-container-lowest", "text-primary", "font-semibold");
+                tabWorker.classList.remove("text-on-surface-variant");
 
-                    tabAdmin.classList.remove("bg-surface-container-lowest", "text-primary", "font-semibold");
-                    tabAdmin.classList.add("text-on-surface-variant");
-                }
-
-                if (msg) msg.textContent = "";
+                tabAdmin.classList.remove("bg-surface-container-lowest", "text-primary", "font-semibold");
+                tabAdmin.classList.add("text-on-surface-variant");
             }
 
-            tabAdmin?.addEventListener("click", () => activateTab("admin"));
-            tabWorker?.addEventListener("click", () => activateTab("worker"));
-        </script>
+            if (msg) msg.textContent = "";
+        }
 
-    </body>
-    </html>
+        tabAdmin?.addEventListener("click", () => activateTab("admin"));
+        tabWorker?.addEventListener("click", () => activateTab("worker"));
+
+        // Estado inicial: colaborador
+        activateTab("worker");
+    </script>
+
+</body>
+</html>

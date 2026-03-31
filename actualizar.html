@@ -1,0 +1,887 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha Social | Actualizar mi ficha</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles-principal.css">
+
+    <style>
+        .hero-card {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(217, 226, 236, 0.95);
+        box-shadow: var(--shadow);
+        border-radius: 22px;
+        padding: 22px;
+        margin-bottom: 18px;
+        }
+
+        .hero-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 18px;
+        flex-wrap: wrap;
+        }
+
+        .hero-name {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        font-size: 1.65rem;
+        font-weight: 800;
+        line-height: 1.05;
+        }
+
+        .hero-subtitle {
+        color: var(--text-soft);
+        margin-top: 6px;
+        font-size: 0.92rem;
+        }
+
+        .hero-badges {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        }
+
+        .section-card {
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(217, 226, 236, 0.95);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 18px;
+        }
+
+        .section-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #eef2f6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        }
+
+        .section-title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 800;
+        font-family: "Manrope", sans-serif;
+        }
+
+        .section-body {
+        padding: 20px;
+        }
+
+        .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        }
+
+        .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        }
+
+        .field-group.full {
+        grid-column: 1 / -1;
+        }
+
+        .field-group label {
+        font-size: 0.86rem;
+        color: var(--text-soft);
+        font-weight: 600;
+        }
+
+        .field-control,
+        .field-group select,
+        .field-group textarea {
+        width: 100%;
+        border: 1px solid #d9e2ec;
+        border-radius: 14px;
+        background: #fff;
+        padding: 12px 14px;
+        font: inherit;
+        color: var(--text);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .field-group textarea,
+        textarea.field-control {
+        min-height: 110px;
+        resize: vertical;
+        }
+
+        .field-control:focus,
+        .field-group select:focus,
+        .field-group textarea:focus {
+        outline: none;
+        border-color: #006491;
+        box-shadow: 0 0 0 4px rgba(0, 100, 145, 0.10);
+        }
+
+        .field-control[readonly] {
+        background: #f6f8fb;
+        color: #5c6873;
+        cursor: not-allowed;
+        }
+
+        .helper-note {
+        font-size: 0.82rem;
+        color: var(--text-soft);
+        line-height: 1.5;
+        }
+
+        .actions-bar {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+        }
+
+        .status-box {
+        border-radius: 16px;
+        padding: 14px 16px;
+        background: #f8fbff;
+        border: 1px solid #d9eaf5;
+        color: #27485d;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        margin-bottom: 16px;
+        }
+
+        .family-card {
+        border: 1px solid #e7edf3;
+        border-radius: 18px;
+        padding: 16px;
+        background: #fbfdff;
+        margin-bottom: 14px;
+        }
+
+        .family-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+        }
+
+        .family-card-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin: 0;
+        }
+
+        .btn-danger-soft {
+        border: 1px solid #fecaca;
+        background: #fff1f2;
+        color: #b42318;
+        border-radius: 12px;
+        padding: 10px 14px;
+        font: inherit;
+        cursor: pointer;
+        }
+
+        .btn-danger-soft:hover {
+        background: #ffe4e6;
+        }
+
+        .hidden {
+        display: none !important;
+        }
+
+        .section-tools-elegant {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+        }
+
+        .section-tools-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        }
+
+        .section-tools-label {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text);
+        }
+
+        .section-tools-help {
+        font-size: 0.82rem;
+        color: var(--text-soft);
+        line-height: 1.4;
+        }
+
+        .section-tools-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 12px;
+        }
+
+        .binary-choice-segmented {
+        display: inline-flex;
+        align-items: center;
+        gap: 0;
+        background: #f4f7fb;
+        border: 1px solid #d7e2ec;
+        border-radius: 999px;
+        padding: 4px;
+        box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+        }
+
+        .choice-btn {
+        border: none;
+        background: transparent;
+        color: var(--text-soft);
+        border-radius: 999px;
+        padding: 9px 14px;
+        font: inherit;
+        font-weight: 700;
+        font-size: 0.84rem;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        min-width: 94px;
+        }
+
+        .choice-btn:hover {
+        color: var(--text);
+        }
+
+        .choice-btn.active {
+        background: #ffffff;
+        color: #005b88;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+        }
+
+        .btn-add-soft {
+        border-radius: 12px;
+        background: #fbfdff;
+        border: 1px solid #d9e2ec;
+        color: var(--text);
+        font-weight: 600;
+        }
+
+        .btn-add-soft:hover {
+        background: #f3f8fc;
+        border-color: #bfd3e2;
+        }
+
+        .choice-note {
+        margin-top: 10px;
+        padding: 13px 14px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #fbfdff 0%, #f7fafc 100%);
+        border: 1px dashed #c7d2de;
+        color: #607080;
+        font-size: 0.84rem;
+        line-height: 1.5;
+        }
+
+        .field-error {
+        border-color: #dc2626 !important;
+        box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.10) !important;
+        background: #fffafa !important;
+        }
+
+        @media (max-width: 991px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-name {
+            font-size: 1.35rem;
+        }
+
+        .section-tools-elegant {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .section-tools-actions {
+            justify-content: stretch;
+        }
+
+        .section-tools-actions .btn-add-soft {
+            width: 100%;
+        }
+
+        .binary-choice-segmented {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .choice-btn {
+            flex: 1;
+        }
+        }
+    </style>
+    </head>
+    <body>
+
+    <div class="app-shell">
+        <aside class="sidebar">
+        <div class="brand-box">
+            <div class="brand-icon">
+            <i class="bi bi-clipboard2-heart"></i>
+            </div>
+            <div>
+            <h1 class="brand-title">Ficha Social</h1>
+            <div class="brand-subtitle">Portal del colaborador</div>
+            </div>
+        </div>
+
+        <div class="menu-label">Mi espacio</div>
+        <nav class="nav-list">
+            <a href="usuarios.html" class="nav-link">
+            <i class="bi bi-person-badge"></i>
+            Mi ficha
+            </a>
+        </nav>
+
+        <div class="menu-label">Sesión</div>
+        <nav class="nav-list">
+            <a href="#" class="nav-link" id="btnLogout">
+            <i class="bi bi-box-arrow-right"></i>
+            Cerrar sesión
+            </a>
+        </nav>
+        </aside>
+
+        <main class="main-content">
+        <div class="bg-orb one"></div>
+        <div class="bg-orb two"></div>
+
+        <div class="content-wrap">
+            <div class="mobile-top">
+            <button class="mobile-menu-btn" type="button">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="mobile-title">
+                <strong>Ficha Social</strong>
+                <span>Portal del colaborador</span>
+            </div>
+
+            <div class="avatar-circle" id="userInitialsMobile">FS</div>
+            </div>
+
+            <section class="topbar">
+            <div>
+                <div class="page-kicker">Actualizar mi ficha</div>
+                <h2 class="page-title">Completa y actualiza tu información</h2>
+                <p class="page-desc">
+                Puedes editar tu información personal, familiar, de salud y contacto. Los datos laborales y administrativos permanecen controlados por Bienestar Social.
+                </p>
+            </div>
+
+            <div class="topbar-right">
+                <div class="user-chip">
+                <div class="avatar-circle" id="userInitials">FS</div>
+                <div>
+                    <div class="user-name" id="userDisplayName">Colaborador</div>
+                    <div class="user-role">Acceso colaborador</div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <p id="msg" class="text-soft small" style="margin-bottom: 12px;"></p>
+
+            <section class="hero-card">
+            <div class="hero-top">
+                <div>
+                <h3 id="heroNombre" class="hero-name">Cargando ficha...</h3>
+                <div id="heroMeta" class="hero-subtitle">Estamos obteniendo tu información.</div>
+                </div>
+
+                <div class="hero-badges">
+                <span id="badgeEstadoActual" class="badge-soft">-</span>
+                <span id="badgeActivo" class="badge-soft">-</span>
+                </div>
+            </div>
+            </section>
+
+            <form id="formFicha" novalidate>
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Datos del colaborador</h3>
+                </div>
+                <div class="section-body">
+                <div class="status-box">
+                    Los datos principales del colaborador se muestran como referencia. DNI y nombre completo permanecen bloqueados.
+                </div>
+
+                <div class="form-grid">
+                    <div class="field-group">
+                    <label for="dni">DNI</label>
+                    <input id="dni" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="nombreCompleto">Nombre completo</label>
+                    <input id="nombreCompleto" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="estadoCivil">Estado civil</label>
+                    <select id="estadoCivil" required>
+                        <option value="">Seleccionar</option>
+                        <option value="Soltero(a)">Soltero(a)</option>
+                        <option value="Casado(a)">Casado(a)</option>
+                        <option value="Conviviente">Conviviente</option>
+                        <option value="Divorciado(a)">Divorciado(a)</option>
+                        <option value="Viudo(a)">Viudo(a)</option>
+                    </select>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="genero">Género</label>
+                    <select id="genero" required>
+                        <option value="">Seleccionar</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
+                        <option value="Prefiero no indicar">Prefiero no indicar</option>
+                    </select>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="fechaNacimiento">Fecha de nacimiento</label>
+                    <input id="fechaNacimiento" class="field-control" type="date" required>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="nacionalidad">Nacionalidad</label>
+                    <select id="nacionalidad" required>
+                        <option value="">Seleccionar</option>
+                        <option value="Peruana">Peruana</option>
+                        <option value="Venezolana">Venezolana</option>
+                        <option value="Colombiana">Colombiana</option>
+                        <option value="Ecuatoriana">Ecuatoriana</option>
+                        <option value="Boliviana">Boliviana</option>
+                        <option value="Chilena">Chilena</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Brasileña">Brasileña</option>
+                        <option value="Paraguaya">Paraguaya</option>
+                        <option value="Uruguaya">Uruguaya</option>
+                        <option value="Mexicana">Mexicana</option>
+                        <option value="Española">Española</option>
+                        <option value="Estadounidense">Estadounidense</option>
+                        <option value="Canadiense">Canadiense</option>
+                        <option value="Italiana">Italiana</option>
+                        <option value="Francesa">Francesa</option>
+                        <option value="Alemana">Alemana</option>
+                        <option value="China">China</option>
+                        <option value="Japonesa">Japonesa</option>
+                        <option value="Coreana">Coreana</option>
+                        <option value="Filipina">Filipina</option>
+                        <option value="Dominicana">Dominicana</option>
+                        <option value="Cubana">Cubana</option>
+                        <option value="Panameña">Panameña</option>
+                        <option value="Otra">Otra</option>
+                    </select>
+                    </div>
+
+                    <div class="field-group hidden" id="nacionalidadOtraWrap">
+                    <label for="nacionalidadOtra">Especifica nacionalidad</label>
+                    <input id="nacionalidadOtra" class="field-control" type="text" placeholder="Ej. Sueca">
+                    </div>
+
+                    <div class="field-group">
+                    <label for="tallaCasaca">Talla de casaca</label>
+                    <select id="tallaCasaca" required>
+                        <option value="">Seleccionar</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                        <option value="XXXL">XXXL</option>
+                    </select>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="tallaPantalon">Talla de pantalón</label>
+                    <select id="tallaPantalon" required>
+                        <option value="">Seleccionar</option>
+                        <option value="XS">26</option>
+                        <option value="S">28</option>
+                        <option value="M">30</option>
+                        <option value="L">32</option>
+                        <option value="XL">34</option>
+                        <option value="XXL">36</option>
+                        <option value="XXXL">38</option>
+                    </select>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Datos de contacto y ubicación</h3>
+                </div>
+                <div class="section-body">
+                <div class="form-grid">
+                    <div class="field-group">
+                    <label for="telefono">Teléfono</label>
+                    <input id="telefono" class="field-control" type="tel" placeholder="Ej. 987654321" required>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="correo">Correo</label>
+                    <input id="correo" class="field-control" type="email" placeholder="Ej. nombre@correo.com" required>
+                    </div>
+
+                    <div class="field-group full">
+                    <label for="direccion">Dirección actual</label>
+                    <input id="direccion" class="field-control" type="text" placeholder="Ej. Urb. Santa María de Lambramani C6" required>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="referencia">Referencia</label>
+                    <input id="referencia" class="field-control" type="text" placeholder="Ej. Frente al parque" required>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="selDep">Departamento</label>
+                    <select id="selDep" class="field-control" required>
+                        <option value="">Seleccionar</option>
+                    </select>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="selProv">Provincia</label>
+                    <select id="selProv" class="field-control" disabled required>
+                        <option value="">Seleccionar</option>
+                    </select>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="selDist">Distrito</label>
+                    <select id="selDist" class="field-control" disabled required>
+                        <option value="">Seleccionar</option>
+                    </select>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Formación académica y salud</h3>
+                </div>
+                <div class="section-body">
+                <div class="form-grid">
+                    <div class="field-group">
+                    <label for="nivelAcademico">Nivel académico</label>
+                    <select id="nivelAcademico" required>
+                        <option value="">Seleccionar</option>
+                        <option value="Secundaria">Secundaria</option>
+                        <option value="Técnico">Técnico</option>
+                        <option value="Universitario">Universitario</option>
+                        <option value="Posgrado">Posgrado</option>
+                    </select>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="profesion">Profesión / carrera</label>
+                    <input id="profesion" class="field-control" type="text" placeholder="Ej. Ingeniería de Sistemas" required>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="tipoSangre">Tipo de sangre</label>
+                    <select id="tipoSangre" required>
+                        <option value="">Seleccionar</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Alergias</h3>
+                </div>
+                <div class="section-body">
+                <div class="section-tools-elegant">
+                    <div class="section-tools-copy">
+                    <div class="section-tools-label">¿Presentas alergias?</div>
+                    <div class="section-tools-help">Selecciona una opción para registrar esta información de salud.</div>
+                    </div>
+
+                    <div class="binary-choice-segmented" id="choiceAlergias">
+                    <button type="button" class="choice-btn" data-target="alergias" data-value="si">Sí tiene</button>
+                    <button type="button" class="choice-btn" data-target="alergias" data-value="no">No tiene</button>
+                    </div>
+                </div>
+
+                <div class="section-tools-actions">
+                    <button id="btnAgregarAlergia" type="button" class="btn-outline btn-add-soft">
+                    <i class="bi bi-plus-circle" style="margin-right:6px;"></i>
+                    Agregar alergia
+                    </button>
+                </div>
+
+                <div id="alergiasContent">
+                    <div id="alergiasList"></div>
+                </div>
+
+                <div id="alergiasEmptyNote" class="choice-note hidden">
+                    El colaborador indicó que no presenta alergias.
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Enfermedades</h3>
+                </div>
+                <div class="section-body">
+                <div class="section-tools-elegant">
+                    <div class="section-tools-copy">
+                    <div class="section-tools-label">¿Presentas enfermedades o antecedentes?</div>
+                    <div class="section-tools-help">Selecciona una opción para dejar constancia de esta condición.</div>
+                    </div>
+
+                    <div class="binary-choice-segmented" id="choiceEnfermedades">
+                    <button type="button" class="choice-btn" data-target="enfermedades" data-value="si">Sí tiene</button>
+                    <button type="button" class="choice-btn" data-target="enfermedades" data-value="no">No tiene</button>
+                    </div>
+                </div>
+
+                <div class="section-tools-actions">
+                    <button id="btnAgregarEnfermedad" type="button" class="btn-outline btn-add-soft">
+                    <i class="bi bi-plus-circle" style="margin-right:6px;"></i>
+                    Agregar enfermedad
+                    </button>
+                </div>
+
+                <div id="enfermedadesContent">
+                    <div id="enfermedadesList"></div>
+                </div>
+
+                <div id="enfermedadesEmptyNote" class="choice-note hidden">
+                    El colaborador indicó que no presenta enfermedades o antecedentes relevantes.
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Información laboral</h3>
+                </div>
+                <div class="section-body">
+                <div class="status-box">
+                    Estos datos son administrados por Bienestar Social y se muestran solo como referencia.
+                </div>
+
+                <div class="form-grid">
+                    <div class="field-group">
+                    <label for="fechaIngreso">Fecha de ingreso</label>
+                    <input id="fechaIngreso" class="field-control" type="date" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="categoria">Categoría</label>
+                    <input id="categoria" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="sede">Sede</label>
+                    <input id="sede" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="cargo">Cargo</label>
+                    <input id="cargo" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="selDirCorp">Dirección corporativa</label>
+                    <input id="selDirCorp" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="selAreaCorp">Área</label>
+                    <input id="selAreaCorp" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="selSeccionCorp">Sección</label>
+                    <input id="selSeccionCorp" class="field-control" type="text" readonly>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Contacto de emergencia</h3>
+                </div>
+                <div class="section-body">
+                <div class="form-grid">
+                    <div class="field-group">
+                    <label for="emergenciaNombre">Nombres y apellidos</label>
+                    <input id="emergenciaNombre" class="field-control" type="text" placeholder="Obligatorio" required>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="emergenciaParentesco">Parentesco</label>
+                    <select id="emergenciaParentesco" required>
+                        <option value="">Seleccionar</option>
+                        <option value="Padre/Madre">Padre/Madre</option>
+                        <option value="Cónyuge/Esposa(o)/Conviviente">Cónyuge/Esposa(o)/Conviviente</option>
+                        <option value="Hermano(a)">Hermano(a)</option>
+                        <option value="Hijo(a)">Hijo(a)</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="emergenciaTelefono">Teléfono</label>
+                    <input id="emergenciaTelefono" class="field-control" type="tel" placeholder="Obligatorio" required>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Cónyuge / conviviente</h3>
+                </div>
+                <div class="section-body">
+                <div class="section-tools-elegant">
+                    <div class="section-tools-copy">
+                    <div class="section-tools-label">¿Tienes cónyuge o conviviente?</div>
+                    <div class="section-tools-help">Selecciona una opción para continuar con este bloque.</div>
+                    </div>
+
+                    <div class="binary-choice-segmented" id="choiceConyuge">
+                    <button type="button" class="choice-btn" data-target="conyuge" data-value="si">Sí tiene</button>
+                    <button type="button" class="choice-btn" data-target="conyuge" data-value="no">No tiene</button>
+                    </div>
+                </div>
+
+                <div class="section-tools-actions">
+                    <button id="btnAgregarConyuge" type="button" class="btn-outline btn-add-soft">
+                    <i class="bi bi-plus-circle" style="margin-right:6px;"></i>
+                    Agregar cónyuge / conviviente
+                    </button>
+                </div>
+
+                <div id="conyugeContent">
+                    <div id="conyugeContainer"></div>
+                </div>
+
+                <div id="conyugeEmptyNote" class="choice-note hidden">
+                    El colaborador indicó que no tiene cónyuge o conviviente.
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Hijos</h3>
+                </div>
+                <div class="section-body">
+                <div class="section-tools-elegant">
+                    <div class="section-tools-copy">
+                    <div class="section-tools-label">¿Tienes hijos?</div>
+                    <div class="section-tools-help">Selecciona una opción para registrar esta información familiar.</div>
+                    </div>
+
+                    <div class="binary-choice-segmented" id="choiceHijos">
+                    <button type="button" class="choice-btn" data-target="hijos" data-value="si">Sí tiene</button>
+                    <button type="button" class="choice-btn" data-target="hijos" data-value="no">No tiene</button>
+                    </div>
+                </div>
+
+                <div class="section-tools-actions">
+                    <button id="btnAgregarHijo" type="button" class="btn-outline btn-add-soft">
+                    <i class="bi bi-plus-circle" style="margin-right:6px;"></i>
+                    Agregar hijo
+                    </button>
+                </div>
+
+                <div id="hijosContent">
+                    <div id="childrenList" class="children-list"></div>
+                </div>
+
+                <div id="hijosEmptyNote" class="choice-note hidden">
+                    El colaborador indicó que no tiene hijos.
+                </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                <h3 class="section-title">Observaciones y control</h3>
+                </div>
+                <div class="section-body">
+                <div class="form-grid">
+                    <div class="field-group full">
+                    <label for="observacionAdmin">Observaciones del área</label>
+                    <textarea id="observacionAdmin" class="field-control" readonly></textarea>
+                    <div class="helper-note">
+                        Este campo es solo informativo y no puede ser editado por el colaborador.
+                    </div>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="ultimaActualizacion">Última actualización</label>
+                    <input id="ultimaActualizacion" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label for="estadoActual">Estado actual</label>
+                    <input id="estadoActual" class="field-control" type="text" readonly>
+                    </div>
+                </div>
+
+                <div class="actions-bar">
+                    <a href="usuarios.html" class="btn-outline">
+                    <i class="bi bi-arrow-left" style="margin-right:6px;"></i>
+                    Volver
+                    </a>
+
+                    <button id="btnGuardar" class="btn-primary" type="submit">
+                    <i class="bi bi-floppy" style="margin-right:6px;"></i>
+                    Guardar cambios
+                    </button>
+                </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        </main>
+    </div>
+
+    <script type="module" src="actualizar.js"></script>
+    <script type="module" src="logout.js"></script>
+    </body>
+    </html>

@@ -1,0 +1,597 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha Social | Mi ficha</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles-principal.css">
+
+    <style>
+        .hero-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 22px;
+        margin-bottom: 18px;
+        box-shadow: var(--shadow-xs, 0 1px 2px rgba(16, 24, 40, 0.04));
+        }
+
+        .hero-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        flex-wrap: wrap;
+        }
+
+        .hero-name {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        font-size: 1.75rem;
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        }
+
+        .hero-subtitle {
+        color: var(--text-soft);
+        margin-top: 6px;
+        font-size: 0.92rem;
+        }
+
+        .hero-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        }
+
+        .info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        }
+
+        .info-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 11px 0;
+        border-bottom: 1px solid #edf1f5;
+        }
+
+        .info-row:last-child {
+        border-bottom: none;
+        }
+
+        .info-label {
+        color: var(--text-soft);
+        font-size: 0.82rem;
+        min-width: 150px;
+        }
+
+        .info-value {
+        font-weight: 600;
+        text-align: right;
+        word-break: break-word;
+        }
+
+        .summary-grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 16px;
+        }
+
+        .summary-grid-1 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+        }
+
+        .summary-box {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        }
+
+        .summary-box-title {
+        padding: 14px 18px;
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        font-size: 0.96rem;
+        border-bottom: 1px solid var(--border);
+        background: #fcfdff;
+        }
+
+        .summary-box-body {
+        padding: 16px 18px;
+        }
+
+        .readonly-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        }
+
+        .readonly-span-2 {
+        grid-column: span 2;
+        }
+
+        .field-help {
+        color: var(--text-soft);
+        font-size: 0.76rem;
+        margin-top: 6px;
+        line-height: 1.45;
+        }
+
+        .empty-note {
+        color: var(--text-soft);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        }
+
+        .simple-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        }
+
+        .simple-card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        background: var(--surface-soft);
+        }
+
+        .simple-card-title {
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 0.88rem;
+        }
+
+        .simple-card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 16px;
+        }
+
+        .simple-card-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 0.82rem;
+        border-bottom: 1px dashed rgba(0,0,0,0.06);
+        padding-bottom: 6px;
+        }
+
+        .simple-card-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        }
+
+        .simple-card-label {
+        color: var(--text-soft);
+        }
+
+        .simple-card-value {
+        font-weight: 600;
+        text-align: right;
+        }
+
+        .action-panel-body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        }
+
+        .mono-note {
+        background: var(--surface-soft);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        color: var(--text-soft);
+        font-size: 0.82rem;
+        line-height: 1.5;
+        }
+
+        @media (max-width: 991px) {
+        .hero-name {
+            font-size: 1.35rem;
+        }
+
+        .summary-grid-2,
+        .readonly-grid,
+        .simple-card-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .readonly-span-2 {
+            grid-column: span 1;
+        }
+
+        .info-row {
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-value {
+            text-align: left;
+        }
+        }
+    </style>
+    </head>
+    <body>
+    <div class="app-shell">
+        <aside class="sidebar">
+        <div class="brand-box">
+            <div class="brand-icon">
+            <i class="bi bi-clipboard2-heart"></i>
+            </div>
+            <div>
+            <h1 class="brand-title">Ficha Social</h1>
+            <div class="brand-subtitle">Portal del colaborador</div>
+            </div>
+        </div>
+
+        <div class="menu-label">Mi espacio</div>
+        <nav class="nav-list">
+            <a href="usuarios.html" class="nav-link active">
+            <i class="bi bi-person-badge"></i>
+            Mi ficha
+            </a>
+        </nav>
+
+        <div class="menu-label">Sesión</div>
+        <nav class="nav-list">
+            <a href="#" class="nav-link" id="btnLogout">
+            <i class="bi bi-box-arrow-right"></i>
+            Cerrar sesión
+            </a>
+        </nav>
+        </aside>
+
+        <main class="main-content">
+        <div class="bg-orb one"></div>
+        <div class="bg-orb two"></div>
+
+        <div class="content-wrap">
+            <div class="mobile-top">
+            <button class="mobile-menu-btn" type="button">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="mobile-title">
+                <strong>Ficha Social</strong>
+                <span>Portal del colaborador</span>
+            </div>
+
+            <div class="avatar-circle" id="mobileUserInitials">FS</div>
+            </div>
+
+            <section class="topbar">
+            <div>
+                <div class="page-kicker">Mi ficha</div>
+                <h2 class="page-title">Estado de tu ficha social</h2>
+                <p class="page-desc">
+                Revisa la información completa registrada en tu ficha social. Si necesitas corregir datos,
+                puedes actualizar tu información desde el botón correspondiente.
+                </p>
+            </div>
+
+            <div class="topbar-right">
+                <div class="user-chip">
+                <div class="avatar-circle" id="userInitials">FS</div>
+                <div>
+                    <div class="user-name" id="userDisplayName">Colaborador</div>
+                    <div class="user-role">Acceso colaborador</div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <p id="msg" class="text-soft small" style="margin-bottom: 12px;"></p>
+
+            <section class="hero-card">
+            <div class="hero-top">
+                <div>
+                <h3 id="heroNombre" class="hero-name">Cargando ficha...</h3>
+                <div id="heroMeta" class="hero-subtitle">Estamos obteniendo tu información.</div>
+                </div>
+
+                <div class="hero-badges">
+                <span id="badgeEstadoActual" class="badge-soft">-</span>
+                <span id="badgeActivo" class="badge-soft">-</span>
+                </div>
+            </div>
+            </section>
+
+            <div class="summary-grid-2">
+            <div class="summary-box">
+                <div class="summary-box-title">Datos principales</div>
+                <div class="summary-box-body">
+                <div class="readonly-grid">
+                    <div class="field-group">
+                    <label>DNI</label>
+                    <input id="dni" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label>Nombre completo</label>
+                    <input id="nombreCompleto" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label>Correo</label>
+                    <input id="correo" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label>Sede</label>
+                    <input id="sede" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label>Cargo</label>
+                    <input id="cargo" class="field-control" type="text" readonly>
+                    </div>
+
+                    <div class="field-group">
+                    <label>Última actualización</label>
+                    <input id="ultimaActualizacion" class="field-control" type="text" readonly>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="stack-card">
+                <div class="panel-card">
+                <div class="panel-header">
+                    <h3 class="panel-title">Acciones</h3>
+                </div>
+                <div class="panel-body action-panel-body">
+                    <a id="btnVerFichaCompleta" class="btn-primary" href="#">
+                    <i class="bi bi-pencil-square" style="margin-right: 6px;"></i>
+                    Actualizar mi ficha
+                    </a>
+
+                    <button id="btnRefrescar" class="btn-outline" type="button">
+                    <i class="bi bi-arrow-repeat" style="margin-right: 6px;"></i>
+                    Actualizar información
+                    </button>
+                </div>
+                </div>
+
+                <div class="panel-card">
+                <div class="panel-header">
+                    <h3 class="panel-title">Información útil</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="mono-note">
+                    El colaborador puede visualizar toda su ficha desde este módulo. La edición de datos
+                    debe realizarse desde la opción <strong>Actualizar mi ficha</strong>. El DNI y el nombre
+                    completo se mantienen bloqueados.
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="summary-grid-2">
+            <div class="summary-box">
+                <div class="summary-box-title">Información personal</div>
+                <div class="summary-box-body">
+                <div class="info-list">
+                    <div class="info-row">
+                    <span class="info-label">Estado civil</span>
+                    <span id="estadoCivil" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Género</span>
+                    <span id="genero" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Nacimiento</span>
+                    <span id="fechaNacimiento" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Nacionalidad</span>
+                    <span id="nacionalidad" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Teléfono</span>
+                    <span id="telefono" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Dirección</span>
+                    <span id="direccion" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Referencia</span>
+                    <span id="referenciaDireccion" class="info-value">-</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-box-title">Información laboral</div>
+                <div class="summary-box-body">
+                <div class="info-list">
+                    <div class="info-row">
+                    <span class="info-label">Categoría</span>
+                    <span id="categoria" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Fecha de ingreso</span>
+                    <span id="fechaIngreso" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Dirección corp.</span>
+                    <span id="direccionCorporativa" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Área</span>
+                    <span id="area" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Sección</span>
+                    <span id="seccion" class="info-value">-</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="summary-grid-2">
+            <div class="summary-box">
+                <div class="summary-box-title">Familia y contacto</div>
+                <div class="summary-box-body">
+                <div class="info-list">
+                    <div class="info-row">
+                    <span class="info-label">Cónyuge / conviviente</span>
+                    <span id="conyugeNombre" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Nacimiento cónyuge</span>
+                    <span id="conyugeNacimiento" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Dependientes</span>
+                    <span id="dependientes" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Hijos</span>
+                    <span id="cantidadHijos" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Contacto de emergencia</span>
+                    <span id="emergenciaNombre" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Parentesco</span>
+                    <span id="emergenciaParentesco" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Tel. emergencia</span>
+                    <span id="emergenciaTelefono" class="info-value">-</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-box-title">Salud y formación</div>
+                <div class="summary-box-body">
+                <div class="info-list">
+                    <div class="info-row">
+                    <span class="info-label">Nivel académico</span>
+                    <span id="nivelAcademico" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Profesión</span>
+                    <span id="profesion" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Tipo de sangre</span>
+                    <span id="tipoSangre" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Alergias</span>
+                    <span id="alergias" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Enfermedades</span>
+                    <span id="enfermedades" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Seguros</span>
+                    <span id="seguros" class="info-value">-</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="summary-grid-1">
+            <div class="summary-box">
+                <div class="summary-box-title">Detalle de hijos</div>
+                <div class="summary-box-body">
+                <div id="hijosContainer" class="simple-list">
+                    <div class="empty-note">No hay hijos registrados.</div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="summary-grid-2">
+            <div class="summary-box">
+                <div class="summary-box-title">Detalle de alergias</div>
+                <div class="summary-box-body">
+                <div id="alergiasContainer" class="simple-list">
+                    <div class="empty-note">No hay alergias registradas.</div>
+                </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-box-title">Detalle de enfermedades / antecedentes</div>
+                <div class="summary-box-body">
+                <div id="enfermedadesContainer" class="simple-list">
+                    <div class="empty-note">No hay enfermedades registradas.</div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="summary-grid-2">
+            <div class="summary-box">
+                <div class="summary-box-title">Estado de la ficha</div>
+                <div class="summary-box-body">
+                <div class="info-list">
+                    <div class="info-row">
+                    <span class="info-label">Estado actual</span>
+                    <span id="estadoTexto" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Situación</span>
+                    <span id="activoTexto" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Fecha de registro</span>
+                    <span id="fechaRegistro" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                    <span class="info-label">Última revisión</span>
+                    <span id="fechaRevision" class="info-value">-</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-box-title">Observaciones</div>
+                <div class="summary-box-body">
+                <div id="observacionAdmin" class="empty-note">
+                    No hay observaciones registradas por el momento.
+                </div>
+                <div class="field-help">
+                    Este bloque es informativo y muestra cualquier observación registrada por Bienestar Social.
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </main>
+    </div>
+
+    <script type="module" src="usuarios.js"></script>
+    <script type="module" src="logout.js"></script>
+    </body>
+    </html>

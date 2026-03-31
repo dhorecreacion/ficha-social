@@ -1,0 +1,788 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha Social | Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles-principal.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .dashboard-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        }
+
+        .kpi-grid.kpi-grid-extended {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        }
+
+        .kpi-card {
+        position: relative;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid #d8e3ee;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+        }
+
+        .kpi-card::after {
+        display: none;
+        }
+
+        .kpi-card .kpi-sub {
+        margin-top: 6px;
+        color: var(--text-soft);
+        font-size: 0.78rem;
+        line-height: 1.4;
+        }
+
+        .kpi-card .kpi-icon {
+        background: #edf5fb;
+        color: #1f5f8f;
+        }
+
+        .section-intro {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 20px 8px;
+        }
+
+        .section-intro h3 {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        font-size: 1.02rem;
+        font-weight: 800;
+        color: var(--text);
+        }
+
+        .section-intro p {
+        margin: 6px 0 0;
+        color: var(--text-soft);
+        font-size: 0.84rem;
+        line-height: 1.45;
+        max-width: 780px;
+        }
+
+        .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        }
+
+        .chart-card {
+        background: #ffffff;
+        border: 1px solid #d9e2ec;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.045);
+        overflow: hidden;
+        }
+
+        .chart-card-header {
+        padding: 14px 16px 10px;
+        border-bottom: 1px solid #edf2f7;
+        background: linear-gradient(180deg, #fcfeff 0%, #f7fbff 100%);
+        }
+
+        .chart-card-title {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        font-size: 0.96rem;
+        font-weight: 700;
+        color: #1f2937;
+        letter-spacing: 0.1px;
+        }
+
+        .chart-card-subtitle {
+        margin-top: 4px;
+        color: #6b7280;
+        font-size: 0.79rem;
+        line-height: 1.4;
+        }
+
+        .chart-card-body {
+        padding: 14px 16px 16px;
+        }
+
+        .chart-scroll-area {
+        max-height: 380px;
+        overflow: auto;
+        padding-right: 6px;
+        }
+
+        .chart-scroll-area.is-horizontal-chart {
+        min-height: 320px;
+        }
+
+        .chart-scroll-canvas {
+        position: relative;
+        min-height: 280px;
+        width: 100%;
+        }
+
+        .summary-grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        }
+
+        .metric-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        }
+
+        .metric-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eef2f6;
+        }
+
+        .metric-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        }
+
+        .metric-label {
+        color: var(--text-soft);
+        font-size: 0.88rem;
+        line-height: 1.35;
+        }
+
+        .metric-value {
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        color: var(--text);
+        font-size: 1rem;
+        }
+
+        .person-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        }
+
+        .person-name {
+        font-weight: 700;
+        color: var(--text);
+        }
+
+        .person-meta {
+        color: var(--text-soft);
+        font-size: 0.8rem;
+        line-height: 1.35;
+        }
+
+        .status-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        }
+
+        .status-tag.info {
+        background: #eaf4fd;
+        color: #285f87;
+        border-color: #d4e7f7;
+        }
+
+        .status-tag.warn {
+        background: #fff5e8;
+        color: #94642b;
+        border-color: #f3dfbf;
+        }
+
+        .status-tag.success {
+        background: #edf8f2;
+        color: #2f7650;
+        border-color: #d3ebdd;
+        }
+
+        .status-tag.muted {
+        background: #f3f5f7;
+        color: #66707a;
+        border-color: #e2e8ef;
+        }
+
+        .table-note {
+        margin-top: 12px;
+        color: var(--text-soft);
+        font-size: 0.82rem;
+        line-height: 1.45;
+        }
+
+        .table-scroll-area {
+        max-height: 420px;
+        overflow: auto;
+        border-radius: 16px;
+        }
+
+        .table-scroll-area table {
+        min-width: 100%;
+        }
+
+        .table-scroll-area thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #f8fbff;
+        }
+
+        .chart-scroll-area::-webkit-scrollbar,
+        .table-scroll-area::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+        }
+
+        .chart-scroll-area::-webkit-scrollbar-thumb,
+        .table-scroll-area::-webkit-scrollbar-thumb {
+        background: #cfdbe8;
+        border-radius: 999px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        }
+
+        .chart-scroll-area::-webkit-scrollbar-track,
+        .table-scroll-area::-webkit-scrollbar-track {
+        background: #f3f7fb;
+        border-radius: 999px;
+        }
+
+        @media (max-width: 1400px) {
+        .kpi-grid.kpi-grid-extended {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        }
+
+        @media (max-width: 991px) {
+        .charts-grid,
+        .summary-grid-2 {
+            grid-template-columns: 1fr;
+        }
+        }
+
+        @media (max-width: 640px) {
+        .kpi-grid.kpi-grid-extended {
+            grid-template-columns: 1fr;
+        }
+
+        .section-intro {
+            padding: 16px 16px 8px;
+        }
+
+        .chart-scroll-area {
+            max-height: 340px;
+        }
+
+        .table-scroll-area {
+            max-height: 360px;
+        }
+        }
+    </style>
+    </head>
+    <body>
+
+    <div class="app-shell">
+
+        <aside class="sidebar">
+        <div class="brand-box">
+            <div class="brand-icon">
+            <i class="bi bi-clipboard2-heart"></i>
+            </div>
+            <div>
+            <h1 class="brand-title">Ficha Social</h1>
+            <div class="brand-subtitle">Panel administrativo</div>
+            </div>
+        </div>
+
+        <div class="menu-label">Principal</div>
+        <nav class="nav-list">
+            <a href="dashboard.html" class="nav-link active">
+            <i class="bi bi-grid"></i>
+            Dashboard
+            </a>
+            <a href="fichas.html" class="nav-link">
+            <i class="bi bi-folder2-open"></i>
+            Fichas sociales
+            </a>
+        </nav>
+
+        <div class="menu-label">Administración</div>
+        <nav class="nav-list">
+            <a href="#" class="nav-link" id="btnLogout">
+            <i class="bi bi-box-arrow-right"></i>
+            Cerrar sesión
+            </a>
+        </nav>
+        </aside>
+
+        <main class="main-content">
+        <div class="bg-orb one"></div>
+        <div class="bg-orb two"></div>
+
+        <div class="content-wrap">
+
+            <div class="mobile-top">
+            <button class="mobile-menu-btn" type="button">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="mobile-title">
+                <strong>Ficha Social</strong>
+                <span>Panel administrativo</span>
+            </div>
+
+            <div class="avatar-circle">CY</div>
+            </div>
+
+            <section class="topbar">
+            <div>
+                <div class="page-kicker">Dashboard</div>
+                <h2 class="page-title">Panel administrativo de ficha social</h2>
+                <p class="page-desc">
+                Visualiza indicadores demográficos, familiares y administrativos de forma clara y ejecutiva para facilitar el seguimiento y la toma de decisiones.
+                </p>
+            </div>
+
+            <div class="topbar-right">
+                <button class="btn-outline" type="button" id="btnRefresh">
+                <i class="bi bi-arrow-clockwise" style="margin-right: 8px;"></i>
+                Actualizar
+                </button>
+
+                <div class="user-chip">
+                <div class="avatar-circle">BS</div>
+                <div>
+                    <div class="user-name">Bienestar Social</div>
+                    <div class="user-role">Administrador</div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <p id="msg" class="text-soft small" style="margin-bottom: 12px;"></p>
+
+            <div class="dashboard-stack">
+
+            <section>
+                <div class="kpi-grid kpi-grid-extended">
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="bi bi-folder-check"></i></div>
+                    <div class="kpi-label">Fichas registradas</div>
+                    <div class="kpi-value" id="kpiTotal">0</div>
+                    <div class="kpi-sub">Cantidad total de fichas sociales registradas en el sistema.</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="bi bi-patch-check"></i></div>
+                    <div class="kpi-label">Fichas aprobadas</div>
+                    <div class="kpi-value" id="kpiAprobadas">0</div>
+                    <div class="kpi-sub">Fichas que ya cuentan con validación administrativa.</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="bi bi-hourglass-split"></i></div>
+                    <div class="kpi-label">Fichas en revisión</div>
+                    <div class="kpi-value" id="kpiRevision">0</div>
+                    <div class="kpi-sub">Fichas pendientes de revisión o validación.</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="bi bi-exclamation-circle"></i></div>
+                    <div class="kpi-label">Fichas observadas</div>
+                    <div class="kpi-value" id="kpiObservadas">0</div>
+                    <div class="kpi-sub">Fichas con observaciones que requieren corrección.</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="bi bi-people"></i></div>
+                    <div class="kpi-label">Total de hijos registrados</div>
+                    <div class="kpi-value" id="kpiHijos">0</div>
+                    <div class="kpi-sub">Total acumulado de hijos declarados en las fichas.</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="bi bi-person-hearts"></i></div>
+                    <div class="kpi-label">Personal con hijos</div>
+                    <div class="kpi-value" id="kpiPadresMadres">0</div>
+                    <div class="kpi-sub">Suma total de madres y padres registrados en la base.</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="bi bi-person-check"></i></div>
+                    <div class="kpi-label">Madres</div>
+                    <div class="kpi-value" id="kpiMadres">0</div>
+                    <div class="kpi-sub">Personal femenino con al menos un hijo registrado.</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="bi bi-person-badge"></i></div>
+                    <div class="kpi-label">Padres</div>
+                    <div class="kpi-value" id="kpiPadres">0</div>
+                    <div class="kpi-sub">Personal masculino con al menos un hijo registrado.</div>
+                </div>
+                </div>
+            </section>
+
+            <section class="summary-grid-2">
+                <div class="panel-card">
+                <div class="section-intro">
+                    <div>
+                    <h3>Indicadores familiares clave</h3>
+                    <p>
+                        Resumen orientado a beneficios, campañas y seguimiento familiar del personal registrado.
+                    </p>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="metric-list">
+                    <div class="metric-row">
+                        <span class="metric-label">Mujeres con esposo / cónyuge / conviviente e hijos</span>
+                        <strong class="metric-value" id="mMujeresConFamilia">0</strong>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Hombres con cónyuge / conviviente e hijos</span>
+                        <strong class="metric-value" id="mHombresConFamilia">0</strong>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Hijos próximos a cumplir 12 años</span>
+                        <strong class="metric-value" id="mProximos12">0</strong>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Hijos próximos a cumplir 18 años</span>
+                        <strong class="metric-value" id="mProximos18">0</strong>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="panel-card">
+                <div class="section-intro">
+                    <div>
+                    <h3>Distribución para subida</h3>
+                    <p>
+                        Consolidado de residencia para apoyo operativo según ruta de subida: Juliaca, Espinar y Arequipa.
+                    </p>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="metric-list">
+                    <div class="metric-row">
+                        <span class="metric-label">Subida de Juliaca (Puno)</span>
+                        <strong class="metric-value" id="mSubidaJuliaca">0</strong>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Subida de Espinar (Cusco)</span>
+                        <strong class="metric-value" id="mSubidaEspinar">0</strong>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Subida de Arequipa (provincia Caylloma)</span>
+                        <strong class="metric-value" id="mSubidaArequipaCaylloma">0</strong>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Subida de Arequipa (otras provincias y otros departamentos)</span>
+                        <strong class="metric-value" id="mSubidaArequipaOtros">0</strong>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+            </section>
+
+            <section class="charts-grid">
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Distribución del personal por género</h3>
+                    <div class="chart-card-subtitle">
+                    Muestra cuántos colaboradores se registran como masculino, femenino o no especificado.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartGenero"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Distribución del personal por sede</h3>
+                    <div class="chart-card-subtitle">
+                    Permite identificar dónde se concentra el personal registrado en fichas sociales.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area is-horizontal-chart">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartSede"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Distribución del personal por rango de edad</h3>
+                    <div class="chart-card-subtitle">
+                    Agrupación del personal según edad actual para análisis demográfico básico.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartEdades"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Distribución del personal por categoría laboral</h3>
+                    <div class="chart-card-subtitle">
+                    Muestra la composición del personal según la categoría declarada en la ficha.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area is-horizontal-chart">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartCategoria"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Distribución del personal por estado civil</h3>
+                    <div class="chart-card-subtitle">
+                    Permite revisar el estado civil predominante en la población registrada.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartEstadoCivil"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Distribución del personal por área</h3>
+                    <div class="chart-card-subtitle">
+                    Visualiza en qué áreas organizacionales se concentra el registro de fichas.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area is-horizontal-chart">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartArea"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Departamento de residencia del personal</h3>
+                    <div class="chart-card-subtitle">
+                    Resume la distribución geográfica según el departamento declarado de residencia.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area is-horizontal-chart">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartDepartamento"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Cantidad de hijos por sede del colaborador</h3>
+                    <div class="chart-card-subtitle">
+                    Relaciona el total de hijos registrados con la sede laboral del padre o madre.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area is-horizontal-chart">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartHijosSede"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Distribución de hijos por rango de edad</h3>
+                    <div class="chart-card-subtitle">
+                    Útil para campañas, beneficios y seguimiento de hitos familiares importantes.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartHijosEdad"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">Estado administrativo de las fichas</h3>
+                    <div class="chart-card-subtitle">
+                    Resume la situación actual del trámite: borrador, enviado, observado, aprobado, entre otros.
+                    </div>
+                </div>
+                <div class="chart-card-body">
+                    <div class="chart-scroll-area">
+                    <div class="chart-scroll-canvas">
+                        <canvas id="chartEstadoFicha"></canvas>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            <section class="panel-card">
+                <div class="section-intro">
+                <div>
+                    <h3>Detalle de hijos registrados</h3>
+                    <p>
+                    Relación detallada de hijos registrados con edad actual, padre o madre asociado, género del menor y alertas preventivas por próxima edad de 12 o 18 años.
+                    </p>
+                </div>
+                </div>
+
+                <div class="panel-body">
+                <div class="table-wrap table-scroll-area">
+                    <table>
+                    <thead>
+                        <tr>
+                        <th>Hijo / hija</th>
+                        <th>Edad</th>
+                        <th>Género</th>
+                        <th>Fecha de nacimiento</th>
+                        <th>Padre / madre</th>
+                        <th>Género del colaborador</th>
+                        <th>Sede</th>
+                        <th>Alerta 12 años</th>
+                        <th>Alerta 18 años</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyHijos">
+                        <tr>
+                        <td colspan="9">Cargando…</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+
+                <div class="table-note">
+                    Se consideran “próximos a cumplir” aquellos hijos que cumplen 12 o 18 años dentro de los próximos 180 días.
+                </div>
+                </div>
+            </section>
+
+            <section class="panel-card">
+                <div class="section-intro">
+                <div>
+                    <h3>Padres con cónyuge / conviviente e hijos registrados</h3>
+                    <p>
+                    Relación específica del personal masculino que registra hijos y además declara cónyuge, conviviente o pareja en la ficha social.
+                    </p>
+                </div>
+                </div>
+
+                <div class="panel-body">
+                <div class="table-wrap table-scroll-area">
+                    <table>
+                    <thead>
+                        <tr>
+                        <th>DNI</th>
+                        <th>Colaborador</th>
+                        <th>Área</th>
+                        <th>Sede</th>
+                        <th>Cónyuge / conviviente</th>
+                        <th>N.º de hijos</th>
+                        <th class="text-end">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyPadresFamilia">
+                        <tr>
+                        <td colspan="7">Cargando…</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+
+            </section>
+
+            <section class="panel-card">
+            <div class="section-intro">
+                <div>
+                <h3>Madres con esposo / cónyuge / conviviente e hijos registrados</h3>
+                <p>
+                    Relación específica del personal femenino que registra hijos y además declara esposo, cónyuge, conviviente o pareja en la ficha social.
+                </p>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="table-wrap table-scroll-area">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>DNI</th>
+                        <th>Colaboradora</th>
+                        <th>Área</th>
+                        <th>Sede</th>
+                        <th>Esposo / cónyuge / conviviente</th>
+                        <th>N.º de hijos</th>
+                        <th class="text-end">Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyMadresFamilia">
+                    <tr>
+                        <td colspan="7">Cargando…</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            </section>
+
+            </div>
+        </div>
+        </main>
+    </div>
+
+    <script type="module" src="auth-guard.js"></script>
+    <script type="module" src="logout.js"></script>
+    <script type="module" src="dashboard.js"></script>
+    </body>
+    </html>

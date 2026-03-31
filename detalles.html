@@ -1,0 +1,508 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha Social | Detalle</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles-principal.css">
+
+    <style>
+        .info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        }
+
+        .info-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eef2f6;
+        }
+
+        .info-row:last-child {
+        border-bottom: none;
+        }
+
+        .info-label {
+        color: var(--text-soft);
+        font-size: 0.84rem;
+        min-width: 130px;
+        }
+
+        .info-value {
+        font-weight: 600;
+        text-align: right;
+        word-break: break-word;
+        }
+
+        .summary-box .info-row {
+        padding: 6px 0;
+        }
+
+        .summary-box .info-label {
+        min-width: 120px;
+        }
+
+        .status-inline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+        }
+
+        .detail-layout {
+        align-items: start;
+        }
+
+        .admin-note {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #f5f9ff;
+        border: 1px solid #dceafe;
+        color: #456789;
+        font-size: 0.82rem;
+        }
+
+        .seguros-editor {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        }
+
+        .seguro-row {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr auto;
+        gap: 10px;
+        align-items: end;
+        padding: 10px;
+        border: 1px solid #e8eef5;
+        border-radius: 14px;
+        background: #fbfdff;
+        }
+
+        .seguro-empty {
+        padding: 12px 14px;
+        border: 1px dashed #d7e3ef;
+        border-radius: 14px;
+        color: var(--text-soft);
+        font-size: 0.85rem;
+        background: #fafcff;
+        }
+
+        .btn-icon-soft {
+        min-width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        border: 1px solid #e3e8ef;
+        background: #fff;
+        color: #8a2430;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        }
+
+        .btn-icon-soft:hover {
+        background: #fff5f5;
+        border-color: #f1c7c7;
+        }
+
+        .admin-only[hidden] {
+        display: none !important;
+        }
+
+        .seguros-editor select.field-control {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image:
+            linear-gradient(45deg, transparent 50%, #6b7a89 50%),
+            linear-gradient(135deg, #6b7a89 50%, transparent 50%);
+        background-position:
+            calc(100% - 18px) calc(50% - 3px),
+            calc(100% - 12px) calc(50% - 3px);
+        background-size: 6px 6px, 6px 6px;
+        background-repeat: no-repeat;
+        padding-right: 38px;
+        }
+
+        @media (max-width: 991px) {
+        .info-row {
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-value {
+            text-align: left;
+        }
+
+        .seguro-row {
+            grid-template-columns: 1fr;
+        }
+        }
+    </style>
+    </head>
+    <body>
+
+    <div class="app-shell">
+
+        <aside class="sidebar">
+        <div class="brand-box">
+            <div class="brand-icon">
+            <i class="bi bi-clipboard2-heart"></i>
+            </div>
+            <div>
+            <h1 class="brand-title">Ficha Social</h1>
+            <div class="brand-subtitle">Panel administrativo</div>
+            </div>
+        </div>
+
+        <div class="menu-label">Principal</div>
+        <nav class="nav-list">
+            <a href="dashboard.html" class="nav-link">
+            <i class="bi bi-grid"></i>
+            Dashboard
+            </a>
+            <a href="fichas.html" class="nav-link">
+            <i class="bi bi-folder2-open"></i>
+            Fichas sociales
+            </a>
+        </nav>
+
+        <div class="menu-label">Administración</div>
+        <nav class="nav-list">
+            <a href="#" class="nav-link" id="btnLogout">
+            <i class="bi bi-box-arrow-right"></i>
+            Cerrar sesión
+            </a>
+        </nav>
+        </aside>
+
+        <main class="main-content">
+        <div class="bg-orb one"></div>
+        <div class="bg-orb two"></div>
+
+        <div class="content-wrap">
+
+            <div class="mobile-top">
+            <button class="mobile-menu-btn" type="button">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="mobile-title">
+                <strong>Ficha Social</strong>
+                <span>Panel administrativo</span>
+            </div>
+
+            <div class="avatar-circle">CY</div>
+            </div>
+
+            <section class="topbar">
+            <div>
+                <div class="page-kicker">Detalle</div>
+                <h2 class="page-title">Detalle de ficha social</h2>
+                <p class="page-desc">
+                Revisa la información registrada, actualiza el estado y agrega observaciones administrativas.
+                </p>
+            </div>
+
+            <div class="topbar-right">
+                <a class="btn-outline" href="fichas.html">
+                <i class="bi bi-arrow-left" style="margin-right: 8px;"></i>
+                Volver al listado
+                </a>
+
+                <div class="user-chip">
+                <div class="avatar-circle">BS</div>
+                <div>
+                    <div class="user-name">Bienestar Social</div>
+                    <div class="user-role">Administrador</div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <p id="msg" class="text-soft small" style="margin-bottom: 12px;"></p>
+
+            <section>
+            <div class="detail-layout">
+
+                <div class="stack-card">
+
+                <div class="panel-card">
+                    <div class="panel-header">
+                    <h3 class="panel-title">Resumen principal</h3>
+                    </div>
+
+                    <div class="panel-body">
+                    <div class="detail-grid">
+                        <div class="field-group">
+                        <label>DNI</label>
+                        <input id="dni" class="field-control" type="text" readonly>
+                        </div>
+
+                        <div class="field-group">
+                        <label>Nombre completo</label>
+                        <input id="nombreCompleto" class="field-control" type="text" readonly>
+                        </div>
+
+                        <div class="field-group">
+                        <label>Sede</label>
+                        <input id="sede" class="field-control" type="text" readonly>
+                        </div>
+
+                        <div class="field-group">
+                        <label>Correo</label>
+                        <input id="correo" class="field-control" type="email" placeholder="correo@empresa.com">
+                        </div>
+
+                        <div class="field-group">
+                        <label>Estado actual</label>
+                        <select id="estado" class="field-control">
+                            <option value="borrador">Borrador</option>
+                            <option value="enviado">Enviado</option>
+                            <option value="en revisión">En revisión</option>
+                            <option value="observado">Observado</option>
+                            <option value="subsanado">Subsanado</option>
+                            <option value="aprobado">Aprobado</option>
+                        </select>
+                        </div>
+
+                        <div class="field-group">
+                        <label>Última actualización</label>
+                        <input id="ultimaActualizacion" class="field-control" type="text" readonly>
+                        </div>
+
+                        <div class="field-group detail-span-2 admin-only" id="segurosAdminCard">
+                        <label>Seguros y fecha de activación</label>
+                        <div id="segurosEditor" class="seguros-editor"></div>
+
+                        <button class="btn-outline" id="btnAgregarSeguro" type="button" style="margin-top: 10px;">
+                            <i class="bi bi-plus-circle" style="margin-right: 6px;"></i>
+                            Agregar seguro
+                        </button>
+
+                        <div class="admin-note">
+                            Esta sección solo puede ser editada por el administrador.
+                        </div>
+                        </div>
+
+                        <div class="field-group detail-span-2">
+                        <label>Observación del administrador</label>
+                        <textarea id="observacionAdmin" class="field-control textarea-control" placeholder="Escribe una observación administrativa..."></textarea>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-box">
+                    <div class="summary-box-title">Datos personales</div>
+                    <div class="info-list">
+                        <div class="info-row">
+                        <span class="info-label">Estado civil</span>
+                        <span id="estadoCivil" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Género</span>
+                        <span id="genero" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Nacimiento</span>
+                        <span id="fechaNacimiento" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Nacionalidad</span>
+                        <span id="nacionalidad" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Teléfono</span>
+                        <span id="telefono" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Dirección</span>
+                        <span id="direccion" class="info-value">-</span>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="summary-box">
+                    <div class="summary-box-title">Información laboral</div>
+                    <div class="info-list">
+                        <div class="info-row">
+                        <span class="info-label">Categoría</span>
+                        <span id="categoria" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Cargo</span>
+                        <span id="cargo" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Ingreso</span>
+                        <span id="fechaIngreso" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Dirección corp.</span>
+                        <span id="direccionCorporativa" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Área</span>
+                        <span id="area" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Sección</span>
+                        <span id="seccion" class="info-value">-</span>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="summary-box">
+                    <div class="summary-box-title">Familia y contacto</div>
+                    <div class="info-list">
+                        <div class="info-row">
+                        <span class="info-label">Cónyuge</span>
+                        <span id="conyugeNombre" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Nacimiento cónyuge</span>
+                        <span id="conyugeNacimiento" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Dependientes</span>
+                        <span id="dependientes" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Hijos</span>
+                        <span id="hijos" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Emergencia</span>
+                        <span id="contactoEmergencia" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Parentesco</span>
+                        <span id="parentescoEmergencia" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Tel. emergencia</span>
+                        <span id="telefonoEmergencia" class="info-value">-</span>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="summary-box">
+                    <div class="summary-box-title">Salud y formación</div>
+                    <div class="info-list">
+                        <div class="info-row">
+                        <span class="info-label">Nivel académico</span>
+                        <span id="nivelAcademico" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Profesión</span>
+                        <span id="profesion" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Tipo de sangre</span>
+                        <span id="tipoSangre" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Alergias</span>
+                        <span id="alergias" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Enfermedades</span>
+                        <span id="enfermedades" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                        <span class="info-label">Seguros</span>
+                        <span id="seguros" class="info-value">-</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="stack-card">
+
+                <div class="panel-card">
+                    <div class="panel-header">
+                    <h3 class="panel-title">Acciones rápidas</h3>
+                    </div>
+                    <div class="panel-body" style="display:flex; flex-direction:column; gap:10px;">
+                    <button class="btn-primary" id="btnGuardar" type="button">
+                        <i class="bi bi-check2-circle" style="margin-right: 6px;"></i>
+                        Guardar cambios
+                    </button>
+
+                    <button class="btn-danger-soft" id="btnObservar" type="button">
+                        <i class="bi bi-exclamation-octagon" style="margin-right: 6px;"></i>
+                        Marcar como observado
+                    </button>
+
+                    <button class="btn-outline" id="btnAprobar" type="button">
+                        <i class="bi bi-patch-check" style="margin-right: 6px;"></i>
+                        Aprobar ficha
+                    </button>
+
+                    <button class="btn-outline" id="btnToggleActivo" type="button">
+                        <i class="bi bi-arrow-repeat" style="margin-right: 6px;"></i>
+                        Cambiar estado
+                    </button>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-header">
+                    <h3 class="panel-title">Estado del trámite</h3>
+                    </div>
+                    <div class="panel-body" style="display:flex; flex-direction:column; gap:12px;">
+                    <div class="status-inline">
+                        <span class="text-soft">Estado actual</span>
+                        <span id="badgeEstadoActual" class="badge-soft">-</span>
+                    </div>
+
+                    <div class="status-inline">
+                        <span class="text-soft">Situación</span>
+                        <span id="badgeActivo" class="badge-soft">-</span>
+                    </div>
+
+                    <div class="status-inline">
+                        <span class="text-soft">Registrado por</span>
+                        <strong id="registradoPor">-</strong>
+                    </div>
+
+                    <div class="status-inline">
+                        <span class="text-soft">Fecha de registro</span>
+                        <strong id="fechaRegistro">-</strong>
+                    </div>
+
+                    <div class="status-inline">
+                        <span class="text-soft">Última revisión</span>
+                        <strong id="fechaRevision">-</strong>
+                    </div>
+                    </div>
+                </div>
+
+                </div>
+
+            </div>
+            </section>
+
+        </div>
+        </main>
+    </div>
+
+    <script type="module" src="auth-guard.js"></script>
+    <script type="module" src="logout.js"></script>
+    <script type="module" src="detalles.js"></script>
+    </body>
+    </html>

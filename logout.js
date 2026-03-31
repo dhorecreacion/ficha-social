@@ -4,10 +4,7 @@ import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-aut
 document.addEventListener("DOMContentLoaded", () => {
   const btnLogout = document.getElementById("btnLogout");
 
-  if (!btnLogout) {
-    console.warn("No se encontró #btnLogout en esta página");
-    return;
-  }
+  if (!btnLogout) return;
 
   btnLogout.addEventListener("click", async (e) => {
     e.preventDefault();

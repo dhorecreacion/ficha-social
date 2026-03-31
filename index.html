@@ -70,6 +70,10 @@
                 font-size: 80%;
             }
 
+            body {
+                min-height: 100vh;
+            }
+
             .material-symbols-outlined {
                 font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             }
@@ -84,23 +88,31 @@
 
             #panelAdmin,
             #panelWorker {
-                transition: all 0.2s ease;
+                transition: opacity 0.2s ease, transform 0.2s ease;
+            }
+
+            .login-shell {
+                position: relative;
+                isolation: isolate;
+            }
+
+            .login-card {
+                backdrop-filter: blur(6px);
             }
         </style>
     </head>
 
-    <body class="bg-surface font-body text-on-surface min-h-screen flex flex-col">
+    <body class="bg-surface font-body text-on-surface flex flex-col">
 
-        <!-- Main -->
         <main class="flex-grow flex items-center justify-center px-4 py-8 relative overflow-hidden">
 
-            <!-- Fondos decorativos -->
+            <!-- fondos -->
             <div class="absolute top-[-10%] left-[-5%] w-[320px] h-[320px] bg-[#8aceff]/20 rounded-full blur-[90px] -z-10"></div>
             <div class="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#a9f77e]/20 rounded-full blur-[100px] -z-10"></div>
 
-            <div class="w-full max-w-[340px]">
+            <div class="login-shell w-full max-w-[340px]">
 
-                <!-- Logo + título -->
+                <!-- encabezado -->
                 <div class="flex flex-col items-center mb-7">
                     <div class="mb-4 p-3 rounded-full bg-surface-container-lowest soft-shadow">
                         <img src="./logo-dho.png" alt="Bienestar Social" class="h-14 w-14 object-contain" />
@@ -112,14 +124,14 @@
                     </h1>
 
                     <p class="mt-2 font-body text-sm text-on-surface-variant text-center px-4 leading-relaxed">
-                        Selecciona tu tipo de acceso e ingresa la información solicitada para continuar.
+                        Selecciona tu tipo de acceso e ingresa tu información para continuar.
                     </p>
                 </div>
 
-                <!-- Tarjeta -->
-                <div class="bg-surface-container-lowest px-6 py-7 md:px-7 md:py-8 rounded-xl soft-shadow border border-outline-variant/10">
+                <!-- tarjeta -->
+                <div class="login-card bg-surface-container-lowest px-6 py-7 md:px-7 md:py-8 rounded-xl soft-shadow border border-outline-variant/10">
 
-                    <!-- Tabs -->
+                    <!-- tabs -->
                     <div class="flex rounded-lg bg-surface-container p-1 mb-6 gap-1">
                         <button
                             id="tabAdmin"
@@ -138,7 +150,7 @@
                         </button>
                     </div>
 
-                    <!-- Panel Administrador -->
+                    <!-- admin -->
                     <div id="panelAdmin">
                         <form id="loginForm" autocomplete="on" class="space-y-5">
 
@@ -157,6 +169,9 @@
                                         placeholder="usuario@empresa.com"
                                         autocomplete="username"
                                         inputmode="email"
+                                        autocapitalize="off"
+                                        autocorrect="off"
+                                        spellcheck="false"
                                         required
                                         class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
                                             focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
@@ -207,21 +222,20 @@
                                 id="btnLogin"
                                 type="submit"
                                 class="w-full btn-gradient text-white py-3 rounded-full font-headline font-bold text-base tracking-wide
-                                    hover:opacity-90 active:scale-[0.98] transition-all duration-200 soft-shadow mt-3"
+                                    hover:opacity-90 active:scale-[0.98] transition-all duration-200 soft-shadow mt-3 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 Iniciar sesión
                             </button>
-
                         </form>
                     </div>
 
-                    <!-- Panel Colaborador -->
+                    <!-- colaborador -->
                     <div id="panelWorker" class="hidden">
                         <form id="workerForm" autocomplete="on" class="space-y-5">
 
                             <div class="space-y-1.5">
                                 <label class="font-label text-sm font-semibold text-on-surface ml-1" for="workerEmail">
-                                    Correo electrónico
+                                    Correo registrado
                                 </label>
                                 <div class="relative">
                                     <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[19px]">
@@ -231,9 +245,12 @@
                                         id="workerEmail"
                                         name="workerEmail"
                                         type="email"
-                                        placeholder="Ingresa tu correo"
+                                        placeholder="Ingresa tu correo registrado"
                                         autocomplete="username"
                                         inputmode="email"
+                                        autocapitalize="off"
+                                        autocorrect="off"
+                                        spellcheck="false"
                                         class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
                                             focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
                                             transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
@@ -257,6 +274,9 @@
                                         maxlength="8"
                                         placeholder="Ingresa tu DNI"
                                         autocomplete="off"
+                                        autocapitalize="off"
+                                        autocorrect="off"
+                                        spellcheck="false"
                                         class="w-full pl-11 pr-4 py-2.5 bg-surface-container-highest border-none rounded-xl
                                             focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest
                                             transition-all duration-200 text-sm text-on-surface placeholder:text-outline/60"
@@ -268,26 +288,23 @@
                                 id="btnWorkerLogin"
                                 type="submit"
                                 class="w-full btn-gradient text-white py-3 rounded-full font-headline font-bold text-base tracking-wide
-                                    hover:opacity-90 active:scale-[0.98] transition-all duration-200 soft-shadow mt-3"
+                                    hover:opacity-90 active:scale-[0.98] transition-all duration-200 soft-shadow mt-3 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 Continuar
                             </button>
-
                         </form>
                     </div>
 
-                    <!-- Mensaje -->
+                    <!-- mensaje -->
                     <p id="msg" role="status" aria-live="polite"
-                    class="mt-2 text-center text-sm font-label text-error min-h-[0.8rem]"></p>
-
+                    class="mt-3 text-center text-sm font-label text-error min-h-[1.2rem]"></p>
                 </div>
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="bg-[#f0f4fa] w-full flex flex-col md:flex-row justify-between items-center px-6 py-3 mt-auto text-center md:text-left">
             <div class="font-label text-xs text-slate-500 mb-1 md:mb-0">
-                © 2026 Calidad de vida - Dirección de desarrollo humano y organizacional. Todos los derechos reservados.
+                © 2026 Calidad de Vida - Dirección de Desarrollo Humano y Organizacional. Todos los derechos reservados.
             </div>
             <div class="font-label text-xs text-slate-400">
                 Sistema de ficha social
@@ -296,7 +313,7 @@
 
         <noscript>Activa JavaScript para usar la plataforma.</noscript>
 
-        <!-- Mostrar / ocultar contraseña -->
+        <!-- mostrar/ocultar contraseña -->
         <script>
             const passEl = document.getElementById('password');
             const toggleEl = document.getElementById('togglePass');
@@ -328,14 +345,12 @@
             });
         </script>
 
-        <!-- Cambio de tabs -->
+        <!-- tabs -->
         <script>
             const tabAdmin = document.getElementById("tabAdmin");
             const tabWorker = document.getElementById("tabWorker");
-
             const panelAdmin = document.getElementById("panelAdmin");
             const panelWorker = document.getElementById("panelWorker");
-
             const msg = document.getElementById("msg");
 
             function activateTab(tab) {

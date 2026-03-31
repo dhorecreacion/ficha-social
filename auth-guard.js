@@ -1,55 +1,76 @@
-    import { auth } from "./firebase-config.js";
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { auth } from "./firebase-config.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    const ADMIN_UIDS = new Set([
-    "FWqjOlSz4HOyR7ZDjPCVL6t6iUp2",
-    "bFsNvjtDXyZolGITD5KeZnBpE2B3"
-    ]);
+const ADMIN_UIDS = new Set([
+  "FWqjOlSz4HOyR7ZDjPCVL6t6iUp2",
+  "bFsNvjtDXyZolGITD5KeZnBpE2B3"
+]);
 
-    const ADMIN_SESSION_KEY = "adminAuthenticated";
+const ADMIN_SESSION_KEY = "adminAuthenticated";
+const WORKER_SESSION_KEY = "colaboradorValidated";
+const WORKER_FICHA_KEY = "colaboradorFichaId";
 
-    let firstCheckDone = false;
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    redirectToLogin();
+    return;
+  }
 
-    onAuthStateChanged(auth, async (user) => {
-    const isAdminValidated = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+  const isAdmin = ADMIN_UIDS.has(user.uid);
+  const isAdminValidated = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
 
-    if (!firstCheckDone) {
-        firstCheckDone = true;
-    }
+  const isWorkerValidated = sessionStorage.getItem(WORKER_SESSION_KEY) === "true";
+  const fichaId = sessionStorage.getItem(WORKER_FICHA_KEY);
 
-    if (!user) {
-        window.location.replace("index.html");
-        return;
-    }
-
-    if (!ADMIN_UIDS.has(user.uid)) {
-        try {
-        await signOut(auth);
-        } catch (error) {
-        console.warn("No se pudo cerrar sesión de usuario no autorizado:", error);
-        }
-
-        clearAdminSession();
-        window.location.replace("index.html");
-        return;
-    }
-
+  /* ======================
+     ADMIN
+  ====================== */
+  if (isAdmin) {
     if (!isAdminValidated) {
-        try {
-        await signOut(auth);
-        } catch (error) {
-        console.warn("No se pudo cerrar sesión por validación faltante:", error);
-        }
-
-        clearAdminSession();
-        window.location.replace("index.html");
+      await forceLogout();
+      return;
     }
-    });
+    return; // OK
+  }
 
-    function clearAdminSession() {
-    sessionStorage.removeItem("adminAuthenticated");
-    sessionStorage.removeItem("colaboradorValidated");
-    sessionStorage.removeItem("colaboradorFichaId");
-    sessionStorage.removeItem("colaboradorEmail");
-    sessionStorage.removeItem("colaboradorNombre");
+  /* ======================
+     COLABORADOR
+  ====================== */
+  if (user.isAnonymous) {
+    if (!isWorkerValidated || !fichaId) {
+      await forceLogout();
+      return;
     }
+    return; // OK
+  }
+
+  /* ======================
+     CUALQUIER OTRO CASO
+  ====================== */
+  await forceLogout();
+});
+
+/* ======================
+   HELPERS
+====================== */
+
+async function forceLogout() {
+  try {
+    await signOut(auth);
+  } catch {}
+
+  clearSession();
+  redirectToLogin();
+}
+
+function clearSession() {
+  sessionStorage.removeItem("adminAuthenticated");
+  sessionStorage.removeItem("colaboradorValidated");
+  sessionStorage.removeItem("colaboradorFichaId");
+  sessionStorage.removeItem("colaboradorEmail");
+  sessionStorage.removeItem("colaboradorNombre");
+}
+
+function redirectToLogin() {
+  window.location.replace("index.html");
+}

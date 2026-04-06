@@ -85,6 +85,40 @@
         gap: 16px;
         }
 
+        .declaracion-wrap {
+        margin: 24px 0 8px;
+        padding: 16px 20px;
+        background: #f0f7ff;
+        border: 1.5px solid #bfdbfe;
+        border-radius: 12px;
+        }
+
+        .declaracion-label {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: #1e3a5f;
+        line-height: 1.55;
+        }
+
+        .declaracion-label input[type="checkbox"] {
+        margin-top: 3px;
+        flex-shrink: 0;
+        width: 17px;
+        height: 17px;
+        accent-color: #2563eb;
+        cursor: pointer;
+        }
+
+        .declaracion-hint {
+        margin: 8px 0 0 29px;
+        font-size: 0.8rem;
+        color: #dc2626;
+        font-weight: 600;
+        }
+
         .field-group {
         display: flex;
         flex-direction: column;
@@ -861,6 +895,24 @@
                     <label for="estadoActual">Estado actual</label>
                     <input id="estadoActual" class="field-control" type="text" readonly>
                     </div>
+                </div>
+
+                <!-- Declaración de consentimiento — obligatoria -->
+                <div class="declaracion-wrap" id="declaracionWrap">
+                    <label class="declaracion-label">
+                    <input type="checkbox" id="chkDeclaracion" name="meta.declaracionDatos" required>
+                    <span>
+                        Declaro bajo responsabilidad haber leído, comprendido y manifestar mi conformidad con la
+                        <strong>Política de Tratamiento de Datos Personales de Minera Bateas S.A.C.</strong>;
+                        asimismo, dejo constancia de haber otorgado de manera previa, libre, expresa, inequívoca
+                        e informada mi consentimiento para el tratamiento de mis datos personales y de los datos
+                        personales de mis hijos menores de edad, en mi calidad de representante legal, conforme
+                        a la normativa vigente sobre la materia.
+                    </span>
+                    </label>
+                    <p class="declaracion-hint" id="declaracionHint" style="display:none;">
+                    Debes aceptar la declaración para poder guardar.
+                    </p>
                 </div>
 
                 <div class="actions-bar">

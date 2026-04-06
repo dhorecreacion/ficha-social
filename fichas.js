@@ -28,11 +28,13 @@
     const search = $("#search");
     const filtroEstado = $("#fltEstado");
     const filtroRevision = $("#fltRevision");
+    const filtroDeclaracion = $("#fltDeclaracion");
     const msg = $("#msg");
 
     const kpiTotal = $("#kpiTotal");
     const kpiActivas = $("#kpiActivas");
     const kpiInactivas = $("#kpiInactivas");
+    const kpiDeclaracion = $("#kpiDeclaracion");
 
     const modalNuevaFichaEl = $("#modalNuevaFicha");
     const inputNuevoNombreCompleto = $("#nuevoNombreCompleto");
@@ -80,6 +82,7 @@
     btnCrearDesdeModal?.addEventListener("click", createAndGo);
 
     btnExport?.addEventListener("click", exportXLSX);
+    filtroDeclaracion?.addEventListener("change", render);
 
     inputNuevoDni?.addEventListener("input", () => {
         inputNuevoDni.value = inputNuevoDni.value.replace(/\D/g, "").slice(0, 8);
@@ -125,7 +128,7 @@
 
     async function loadFichas() {
     try {
-        tbody.innerHTML = "<tr><td colspan='7'>Cargando…</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='8'>Cargando…</td></tr>";
 
         const qy = query(
         collection(db, "fichas"),
@@ -144,29 +147,35 @@
 
         if (e?.code === "permission-denied") {
         setMsg("No tienes permisos para ver el listado de fichas.");
-        tbody.innerHTML = "<tr><td colspan='7'>Sin permisos</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='8'>Sin permisos</td></tr>";
         return;
         }
 
         if (e?.code === "failed-precondition") {
         setMsg("Firestore pide crear un índice para esta consulta.");
-        tbody.innerHTML = "<tr><td colspan='7'>Falta índice en Firestore</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='8'>Falta índice en Firestore</td></tr>";
         return;
         }
 
         setMsg(human(e));
-        tbody.innerHTML = "<tr><td colspan='7'>No se pudieron cargar las fichas.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='8'>No se pudieron cargar las fichas.</td></tr>";
     }
+    }
+
+    function hasDeclaracion(r) {
+    return r?.meta?.declaracionDatos === true;
     }
 
     function updateKpis() {
     const total = rows.length;
     const activas = rows.filter(isActive).length;
     const inactivas = total - activas;
+    const conDeclaracion = rows.filter(r => isActive(r) && hasDeclaracion(r)).length;
 
     if (kpiTotal) kpiTotal.textContent = total;
     if (kpiActivas) kpiActivas.textContent = activas;
     if (kpiInactivas) kpiInactivas.textContent = inactivas;
+    if (kpiDeclaracion) kpiDeclaracion.textContent = conDeclaracion;
     }
 
     function openNuevaFichaModal() {
@@ -183,6 +192,7 @@
     const term = (search?.value || "").trim().toLowerCase();
     const est = readEstadoFilter();
     const rev = readRevisionFilter();
+    const decl = (filtroDeclaracion?.value || "all").trim().toLowerCase();
 
     return rows.filter((r) => {
         if (est === "act" && !isActive(r)) return false;
@@ -190,6 +200,9 @@
 
         const estadoFicha = normalizeEstado(r.estado || "borrador");
         if (rev !== "all" && estadoFicha !== rev) return false;
+
+        if (decl === "si" && !hasDeclaracion(r)) return false;
+        if (decl === "no" && hasDeclaracion(r)) return false;
 
         if (term) {
         const dni = (r.personal?.doc || r.doc || "").toString().toLowerCase();
@@ -248,7 +261,7 @@
     const data = getFiltered();
 
     if (!data.length) {
-        tbody.innerHTML = "<tr><td colspan='7'>Sin resultados</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='8'>Sin resultados</td></tr>";
         return;
     }
 
@@ -267,6 +280,10 @@
         const situacion = isActive(r)
         ? `<span class="badge ok">Activa</span>`
         : `<span class="badge warn">Inactiva</span>`;
+
+        const declaracionBadge = hasDeclaracion(r)
+        ? `<span class="badge" style="background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;">&#10003; Aceptada</span>`
+        : `<span class="badge" style="background:#fef9c3;color:#92400e;border:1px solid #fde68a;">Pendiente</span>`;
 
         return `
         <tr>
@@ -288,6 +305,7 @@
             <td>${esc(fecha)}</td>
             <td>${renderEstadoBadge(estado)}</td>
             <td>${situacion}</td>
+            <td>${declaracionBadge}</td>
 
             <td class="text-end" style="white-space:nowrap">
             <div class="action-row">

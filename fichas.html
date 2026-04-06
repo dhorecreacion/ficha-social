@@ -250,7 +250,7 @@
             </div>
             </section>
 
-            <section class="kpi-strip">
+            <section class="kpi-strip" style="grid-template-columns: repeat(4, minmax(0,1fr));">
             <div class="kpi-mini">
                 <div class="kpi-mini-label">Total fichas</div>
                 <div class="kpi-mini-value" id="kpiTotal">0</div>
@@ -268,6 +268,12 @@
                 <div class="kpi-mini-value" id="kpiInactivas">0</div>
                 <div class="kpi-mini-sub">Con estado inactivo</div>
             </div>
+
+            <div class="kpi-mini">
+                <div class="kpi-mini-label">Declaración aceptada</div>
+                <div class="kpi-mini-value" id="kpiDeclaracion" style="color:#16a34a;">0</div>
+                <div class="kpi-mini-sub">Activas con consentimiento</div>
+            </div>
             </section>
 
             <section>
@@ -277,7 +283,7 @@
                 </div>
 
                 <div class="panel-body">
-                <div class="filter-grid" style="grid-template-columns: 2fr 1fr 1fr auto;">
+                <div class="filter-grid" style="grid-template-columns: 2fr 1fr 1fr 1fr auto;">
                     <div class="field-group">
                     <label for="search">Buscar por nombre, DNI, correo o teléfono</label>
                     <input id="search" class="field-control" type="text" placeholder="Buscar por DNI, nombres, correo o teléfono…">
@@ -305,6 +311,15 @@
                     </select>
                     </div>
 
+                    <div class="field-group">
+                    <label for="fltDeclaracion">Declaración</label>
+                    <select id="fltDeclaracion" class="field-control">
+                        <option value="all" selected>Todas</option>
+                        <option value="si">Con declaración</option>
+                        <option value="no">Sin declaración</option>
+                    </select>
+                    </div>
+
                     <div class="field-actions">
                     <button class="btn-primary" id="btnFiltrar" type="button">Filtrar</button>
                     </div>
@@ -328,12 +343,13 @@
                         <th>Actualización</th>
                         <th>Estado ficha</th>
                         <th>Situación</th>
+                        <th>Declaración</th>
                         <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr>
-                        <td colspan="7">Cargando…</td>
+                        <td colspan="8">Cargando…</td>
                         </tr>
                     </tbody>
                     </table>

@@ -780,6 +780,12 @@
 
     renderEstadoBadge(estado);
     renderActivoBadge(activo);
+
+    // Pre-marcar declaración si ya fue aceptada anteriormente
+    const chkDeclaracion = $("#chkDeclaracion");
+    if (chkDeclaracion) {
+        chkDeclaracion.checked = getNested(ficha, ["meta.declaracionDatos"], false) === true;
+    }
     }
 
     async function loadFicha() {
@@ -891,6 +897,11 @@
         conyuge: conyugeData,
         hijos: hijosData,
         estado: nuevoEstado,
+        meta: {
+        ...(fichaActual?.meta || {}),
+        declaracionDatos: $("#chkDeclaracion")?.checked === true,
+        declaracionDatosAt: $("#chkDeclaracion")?.checked ? Date.now() : (fichaActual?.meta?.declaracionDatosAt || null)
+        },
         updatedAt: serverTimestamp()
     };
     }
@@ -1085,6 +1096,17 @@
         return false;
         }
     }
+
+    // Declaración de tratamiento de datos personales — obligatoria
+    const chkDeclaracion = $("#chkDeclaracion");
+    const declaracionHint = $("#declaracionHint");
+    if (!chkDeclaracion?.checked) {
+        if (declaracionHint) declaracionHint.style.display = "block";
+        chkDeclaracion?.closest(".declaracion-wrap")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        setMsg("Debes aceptar la declaración de tratamiento de datos personales para guardar.", "error");
+        return false;
+    }
+    if (declaracionHint) declaracionHint.style.display = "none";
 
     return true;
     }

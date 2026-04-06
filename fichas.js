@@ -418,40 +418,170 @@
     }
 
     function exportXLSX() {
-    const data = getFiltered();
+    if (typeof XLSX === "undefined") {
+        alert("La librería de Excel no está disponible. Recarga la página.");
+        return;
+    }
 
+    const data = getFiltered();
     if (!data.length) {
         alert("No hay datos para exportar.");
         return;
     }
 
-    const exportRows = data.map((r) => {
-        const nombres = r.personal?.nombres || r.nombres || "";
-        const apellidos = r.personal?.apellidos || r.apellidos || "";
+    // Calcula la edad en años a partir de "YYYY-MM-DD"
+    function calcEdad(nacStr) {
+        if (!nacStr) return "";
+        const nac = new Date(nacStr);
+        if (isNaN(nac)) return "";
+        const hoy = new Date();
+        let age = hoy.getFullYear() - nac.getFullYear();
+        const m = hoy.getMonth() - nac.getMonth();
+        if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) age--;
+        return age;
+    }
 
-        return {
-        "DNI": r.personal?.doc || r.doc || "",
-        "Apellidos": apellidos,
-        "Nombres": nombres,
-        "Nombre completo": `${apellidos} ${nombres}`.trim(),
-        "Correo": r.contacto?.correo || r.correo || "",
-        "Teléfono": r.contacto?.telefono || r.telefono || "",
-        "Dirección": r.ubicacion?.direccion || "",
-        "Departamento": r.ubicacion?.departamento || "",
-        "Provincia": r.ubicacion?.provincia || "",
-        "Distrito": r.ubicacion?.distrito || "",
-        "Estado ficha": r.estado || "borrador",
-        "Situación": isActive(r) ? "Activa" : "Inactiva",
-        "Actualizado": formatFecha(r.updatedAt || r.createdAt)
-        };
+    // Determina cuántos hijos tiene el colaborador con más hijos
+    const maxHijos = data.reduce((mx, r) => Math.max(mx, (r.hijos || []).length), 0);
+
+    // Cabecera fija
+    const FIXED_HEADERS = [
+        // Identificación
+        "DNI", "Apellidos", "Nombres", "Nombre completo",
+        // Personal
+        "Género", "Fecha nacimiento", "Edad", "Estado civil", "Nacionalidad",
+        "Talla casaca",
+        // Contacto
+        "Correo", "Teléfono",
+        // Ubicación
+        "Dirección", "Referencia", "Departamento", "Provincia", "Distrito",
+        // Laboral
+        "Sede", "Cargo", "Categoría", "Dirección corporativa", "Área", "Sección",
+        "Fecha ingreso",
+        // Académico
+        "Nivel académico", "Profesión",
+        // Emergencia
+        "Contacto emergencia", "Teléfono emergencia", "Parentesco emergencia",
+        // Salud
+        "Tipo de sangre", "Alergias", "Enfermedades crónicas", "Seguros",
+        // Hijos resumen
+        "Tiene hijos", "Nro. hijos",
+        // Estado
+        "Estado ficha", "Situación", "Actualizado"
+    ];
+
+    // Columnas dinámicas de hijos
+    const hijoHeaders = [];
+    for (let i = 1; i <= maxHijos; i++) {
+        hijoHeaders.push(
+        `Hijo${i} Nombres`,
+        `Hijo${i} Apellidos`,
+        `Hijo${i} Nacimiento`,
+        `Hijo${i} Edad`,
+        `Hijo${i} Género`
+        );
+    }
+
+    const headers = [...FIXED_HEADERS, ...hijoHeaders];
+
+    // Filas de datos
+    const rows_xlsx = data.map((r) => {
+        const nombres   = r.personal?.nombres   || "";
+        const apellidos = r.personal?.apellidos || "";
+        const nacStr    = r.personal?.nacimiento || "";
+        const hijos     = Array.isArray(r.hijos) ? r.hijos : [];
+        const seguros   = Array.isArray(r.salud?.seguros) ? r.salud.seguros.join(", ") : "";
+        const alergias  = Array.isArray(r.salud?.alergias) ? r.salud.alergias.join(", ") : "";
+        const enf       = Array.isArray(r.salud?.enfermedadesCronicas) ? r.salud.enfermedadesCronicas.join(", ") : "";
+
+        const fixed = [
+        // Identificación
+        r.personal?.doc        || "",
+        apellidos,
+        nombres,
+        `${apellidos} ${nombres}`.trim(),
+        // Personal
+        r.personal?.genero     || "",
+        nacStr,
+        calcEdad(nacStr),
+        r.personal?.estadoCivil || "",
+        r.personal?.nacionalidad || "",
+        r.personal?.tallaCasaca  || "",
+        // Contacto
+        r.contacto?.correo    || "",
+        r.contacto?.telefono  || "",
+        // Ubicación
+        r.ubicacion?.direccion   || "",
+        r.ubicacion?.referencia  || "",
+        r.ubicacion?.departamento || "",
+        r.ubicacion?.provincia   || "",
+        r.ubicacion?.distrito    || "",
+        // Laboral
+        r.laboral?.sede                  || "",
+        r.laboral?.cargo                 || "",
+        r.laboral?.categoria             || "",
+        r.laboral?.direccionCorporativa  || "",
+        r.laboral?.area                  || "",
+        r.laboral?.seccion               || "",
+        r.laboral?.fechaIngreso          || "",
+        // Académico
+        r.academica?.nivel     || "",
+        r.academica?.profesion || "",
+        // Emergencia
+        r.emergencia?.nombre     || "",
+        r.emergencia?.telefono   || "",
+        r.emergencia?.parentesco || "",
+        // Salud
+        r.salud?.tipoSangre || "",
+        alergias,
+        enf,
+        seguros,
+        // Hijos resumen
+        hijos.length > 0 ? "Sí" : "No",
+        hijos.length,
+        // Estado
+        r.estado || "borrador",
+        isActive(r) ? "Activa" : "Inactiva",
+        formatFecha(r.updatedAt || r.createdAt)
+        ];
+
+        // Columnas dinámicas de hijos
+        const hijoCols = [];
+        for (let i = 0; i < maxHijos; i++) {
+        const h = hijos[i] || {};
+        const hNac = h.nacimiento || "";
+        hijoCols.push(
+            h.nombres   || "",
+            h.apellidos || "",
+            hNac,
+            calcEdad(hNac),
+            h.genero    || ""
+        );
+        }
+
+        return [...fixed, ...hijoCols];
     });
 
-    const ws = XLSX.utils.json_to_sheet(exportRows);
-    const wb = XLSX.utils.book_new();
+    const aoa = [headers, ...rows_xlsx];
+    const ws  = XLSX.utils.aoa_to_sheet(aoa);
 
+    // Anchos de columna orientativos
+    const colWidths = headers.map((h) => {
+        if (h === "Nombre completo") return { wch: 30 };
+        if (h.startsWith("Hijo"))   return { wch: 18 };
+        if (h === "Dirección" || h === "Dirección corporativa") return { wch: 32 };
+        if (h === "Alergias" || h === "Enfermedades crónicas" || h === "Seguros") return { wch: 28 };
+        return { wch: 18 };
+    });
+    ws["!cols"] = colWidths;
+
+    // AutoFiltro en toda la cabecera
+    ws["!autofilter"] = { ref: ws["!ref"] };
+
+    const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Fichas");
 
-    const filename = `fichas_sociales_${new Date().toISOString().slice(0, 10)}.xlsx`;
+    const filename = `fichas-${new Date().toISOString().slice(0, 10)}.xlsx`;
     XLSX.writeFile(wb, filename);
     }
 

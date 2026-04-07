@@ -112,6 +112,18 @@
         cursor: pointer;
         }
 
+        .declaracion-titulo {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin: 0 0 12px;
+        }
+
+        .declaracion-separador {
+        border-top: 1px dashed #bfdbfe;
+        margin: 12px 0;
+        }
+
         .declaracion-hint {
         margin: 8px 0 0 29px;
         font-size: 0.8rem;
@@ -897,10 +909,12 @@
                     </div>
                 </div>
 
-                <!-- Declaración de consentimiento — obligatoria -->
+                <!-- Declaraciones de consentimiento — ambas obligatorias (1 solo campo en Firebase) -->
                 <div class="declaracion-wrap" id="declaracionWrap">
+                    <p class="declaracion-titulo">Para guardar tu ficha debes aceptar las siguientes declaraciones:</p>
+
                     <label class="declaracion-label">
-                    <input type="checkbox" id="chkDeclaracion" name="meta.declaracionDatos" required>
+                    <input type="checkbox" id="chkDeclaracion1">
                     <span>
                         Declaro bajo responsabilidad haber leído, comprendido y manifestar mi conformidad con la
                         <strong>Política de Tratamiento de Datos Personales de Minera Bateas S.A.C.</strong>;
@@ -910,8 +924,30 @@
                         a la normativa vigente sobre la materia.
                     </span>
                     </label>
+
+                    <div class="declaracion-separador"></div>
+
+                    <label class="declaracion-label">
+                    <input type="checkbox" id="chkDeclaracion2">
+                    <span>
+                        Declaro bajo responsabilidad que he consignado a la persona indicada como contacto de
+                        emergencia, respecto de quien cuento con su autorización previa, expresa e informada para
+                        la comunicación de sus datos personales, habiéndole informado previamente sobre dicha
+                        comunicación. Asimismo, dejo constancia de que sus datos personales serán tratados por
+                        <strong>Minera Bateas S.A.C.</strong> de manera exclusiva, necesaria y proporcional para
+                        la atención de situaciones de emergencia que me involucren, tales como accidentes de
+                        trabajo, contingencias de salud u otros supuestos que requieran su comunicación inmediata.
+                        En ese sentido, el tratamiento de los referidos datos personales se sustenta en el
+                        consentimiento previamente otorgado y, de manera complementaria, en la excepción al
+                        consentimiento prevista en el artículo 14, numeral 9 de la Ley N° 29733, Ley de
+                        Protección de Datos Personales, concordado con su Reglamento y normas modificatorias; en
+                        cuanto resulte necesario para salvaguardar mis intereses legítimos, en particular la
+                        protección de mi vida, salud e integridad, circunscribiéndose estrictamente a dichos fines.
+                    </span>
+                    </label>
+
                     <p class="declaracion-hint" id="declaracionHint" style="display:none;">
-                    Debes aceptar la declaración para poder guardar.
+                    Debes aceptar ambas declaraciones para poder guardar.
                     </p>
                 </div>
 

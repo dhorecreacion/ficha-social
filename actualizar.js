@@ -38,7 +38,6 @@
 
     let fichaActual = null;
     let ubigeoData = [];
-    let orgData = [];
 
     const sectionState = {
     conyuge: null,
@@ -781,11 +780,12 @@
     renderEstadoBadge(estado);
     renderActivoBadge(activo);
 
-    // Pre-marcar declaración si ya fue aceptada anteriormente
-    const chkDeclaracion = $("#chkDeclaracion");
-    if (chkDeclaracion) {
-        chkDeclaracion.checked = getNested(ficha, ["meta.declaracionDatos"], false) === true;
-    }
+    // Pre-marcar ambas declaraciones si ya fueron aceptadas anteriormente (1 solo campo Firebase)
+    const yaAcepto = getNested(ficha, ["meta.declaracionDatos"], false) === true;
+    const chk1 = $("#chkDeclaracion1");
+    const chk2 = $("#chkDeclaracion2");
+    if (chk1) chk1.checked = yaAcepto;
+    if (chk2) chk2.checked = yaAcepto;
     }
 
     async function loadFicha() {
@@ -899,8 +899,8 @@
         estado: nuevoEstado,
         meta: {
         ...(fichaActual?.meta || {}),
-        declaracionDatos: $("#chkDeclaracion")?.checked === true,
-        declaracionDatosAt: $("#chkDeclaracion")?.checked ? Date.now() : (fichaActual?.meta?.declaracionDatosAt || null)
+        declaracionDatos: $("#chkDeclaracion1")?.checked === true && $("#chkDeclaracion2")?.checked === true,
+        declaracionDatosAt: ($("#chkDeclaracion1")?.checked && $("#chkDeclaracion2")?.checked) ? Date.now() : (fichaActual?.meta?.declaracionDatosAt || null)
         },
         updatedAt: serverTimestamp()
     };
@@ -1097,13 +1097,16 @@
         }
     }
 
-    // Declaración de tratamiento de datos personales — obligatoria
-    const chkDeclaracion = $("#chkDeclaracion");
+    // Ambas declaraciones obligatorias (mapean a 1 solo campo en Firebase)
+    const chkDeclaracion1 = $("#chkDeclaracion1");
+    const chkDeclaracion2 = $("#chkDeclaracion2");
     const declaracionHint = $("#declaracionHint");
-    if (!chkDeclaracion?.checked) {
+    if (!chkDeclaracion1?.checked || !chkDeclaracion2?.checked) {
         if (declaracionHint) declaracionHint.style.display = "block";
-        chkDeclaracion?.closest(".declaracion-wrap")?.scrollIntoView({ behavior: "smooth", block: "center" });
-        setMsg("Debes aceptar la declaración de tratamiento de datos personales para guardar.", "error");
+        (chkDeclaracion1?.checked ? chkDeclaracion2 : chkDeclaracion1)
+            ?.closest(".declaracion-wrap")
+            ?.scrollIntoView({ behavior: "smooth", block: "center" });
+        setMsg("Debes aceptar ambas declaraciones de tratamiento de datos personales para guardar.", "error");
         return false;
     }
     if (declaracionHint) declaracionHint.style.display = "none";

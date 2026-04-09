@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Ficha Social — Acceso</title>
 
+    <!-- preload LCP -->
+    <link rel="preload" as="image" href="./logo-bateas.png">
+
     <!-- conexiones -->
     <link rel="dns-prefetch" href="https://www.gstatic.com">
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
@@ -110,14 +113,33 @@
         <div class="absolute top-[-10%] left-[-5%] w-[320px] h-[320px] bg-[#8aceff]/20 rounded-full blur-[90px] -z-10"></div>
         <div class="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#a9f77e]/20 rounded-full blur-[100px] -z-10"></div>
 
-        <div class="login-shell w-full max-w-[340px]">
+
+        <div class="flex flex-col items-center w-full max-w-[340px]">
+
+            <!-- Branding -->
+            <header class="mb-7 flex items-center justify-center gap-4">
+                
+                 <!-- Bateas - izquierda -->
+                <img src="./logo-bateas.png" alt="Minera Bateas"
+                    width="240" height="116"
+                    class="h-[5.5rem] w-auto object-contain shrink-0"
+                    fetchpriority="high" decoding="async" />
+                    
+                <!-- Divisor -->
+                <span class="w-px h-12 bg-outline-variant/50 rounded-full shrink-0" aria-hidden="true"></span>
+               <!-- DHO - derecha -->
+                <div class="p-3 rounded-full bg-surface-container-lowest soft-shadow shrink-0">
+                    <img src="./logo-dho.png" alt="DHO"
+                        width="60" height="60"
+                        class="h-[3.75rem] w-[3.75rem] object-contain"
+                        fetchpriority="high" decoding="async" />
+                </div>
+            </header>
+
+            <div class="login-shell w-full">
 
             <!-- encabezado -->
             <div class="flex flex-col items-center mb-7">
-                <div class="mb-4 p-3 rounded-full bg-surface-container-lowest soft-shadow">
-                    <img src="./logo-dho.png" alt="Bienestar Social" class="h-14 w-14 object-contain" />
-                </div>
-
                 <h1 class="font-headline text-3xl font-bold text-on-surface tracking-tight text-center leading-snug">
                     Acceso a <br>
                     <span class="text-primary">Bienestar Social</span>

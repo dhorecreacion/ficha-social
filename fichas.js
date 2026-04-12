@@ -460,7 +460,10 @@
     }
 
     // Determina cuántos hijos tiene el colaborador con más hijos
-    const maxHijos = data.reduce((mx, r) => Math.max(mx, (r.hijos || []).length), 0);
+    const maxHijos = data.reduce((mx, r) => {
+        const h = Array.isArray(r.hijos) ? r.hijos : Array.isArray(r.familia?.hijos) ? r.familia.hijos : [];
+        return Math.max(mx, h.length);
+    }, 0);
 
     // Cabecera fija
     const FIXED_HEADERS = [
@@ -507,7 +510,7 @@
         const nombres   = r.personal?.nombres   || "";
         const apellidos = r.personal?.apellidos || "";
         const nacStr    = r.personal?.nacimiento || "";
-        const hijos     = Array.isArray(r.hijos) ? r.hijos : [];
+        const hijos     = Array.isArray(r.hijos) ? r.hijos : Array.isArray(r.familia?.hijos) ? r.familia.hijos : [];
         const seguros   = Array.isArray(r.salud?.seguros) ? r.salud.seguros.join(", ") : "";
         const alergias  = Array.isArray(r.salud?.alergias) ? r.salud.alergias.join(", ") : "";
         const enf       = Array.isArray(r.salud?.enfermedadesCronicas) ? r.salud.enfermedadesCronicas.join(", ") : "";
@@ -567,7 +570,7 @@
         const hijoCols = [];
         for (let i = 0; i < maxHijos; i++) {
         const h = hijos[i] || {};
-        const hNac = h.nacimiento || "";
+        const hNac = h.fechaNacimiento || h.nacimiento || "";
         hijoCols.push(
             h.nombres   || "",
             h.apellidos || "",

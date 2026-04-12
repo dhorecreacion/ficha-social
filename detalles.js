@@ -165,7 +165,7 @@
     $("#conyugeNacimiento").textContent = formatFecha(r.conyuge?.nacimiento);
 
     $("#dependientes").textContent = Array.isArray(r.hijos) ? r.hijos.length : "0";
-    $("#hijos").textContent = Array.isArray(r.hijos) ? formatHijos(r.hijos) : "-";
+    $("#hijos").innerHTML = Array.isArray(r.hijos) && r.hijos.length ? formatHijosHTML(r.hijos) : "-";
 
     $("#contactoEmergencia").textContent = r.emergencia?.nombre || "-";
     $("#parentescoEmergencia").textContent = r.emergencia?.parentesco || "-";
@@ -580,9 +580,17 @@
     }
     }
 
-    function formatHijos(hijos) {
+    function formatHijosHTML(hijos) {
     if (!Array.isArray(hijos) || !hijos.length) return "-";
-    return hijos.map(h => h?.nombre || "-").join(", ");
+    return hijos.map(h => {
+        const nombre = [h?.nombres, h?.apellidos].filter(Boolean).join(" ") || h?.nombre || "-";
+        const fechaRaw = h?.fechaNacimiento || h?.nacimiento;
+        const fechaStr = fechaRaw ? formatFecha(fechaRaw) : "";
+        const fechaPart = fechaStr
+        ? ` <span style="color:var(--text-soft);font-weight:400;">(${escAttr(fechaStr)})</span>`
+        : "";
+        return `<div style="margin-bottom:2px;">${escAttr(nombre)}${fechaPart}</div>`;
+    }).join("");
     }
 
     function formatSeguros(seguros, fechas) {

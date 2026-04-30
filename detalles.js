@@ -33,6 +33,8 @@
     const btnAgregarSeguro = $("#btnAgregarSeguro");
     const segurosEditor = $("#segurosEditor");
     const segurosAdminCard = $("#segurosAdminCard");
+    const tallaCasacaEl = $("#tallaCasaca");
+    const tallaPantalonEl = $("#tallaPantalon");
 
     const params = new URLSearchParams(window.location.search);
     const fichaId = params.get("id");
@@ -143,6 +145,9 @@
     $("#ultimaActualizacion").value = formatFechaHora(r.updatedAt || r.createdAt);
     $("#observacionAdmin").value = r.admin?.observacion || "";
 
+    if (tallaCasacaEl) tallaCasacaEl.value = r.personal?.tallaCasaca || "";
+    if (tallaPantalonEl) tallaPantalonEl.value = r.personal?.tallaPantalon || "";
+
     $("#estadoCivil").textContent = r.personal?.estadoCivil || "-";
     $("#telefono").textContent = r.contacto?.telefono || "-";
     $("#direccion").textContent = direccionCompleta || "-";
@@ -200,6 +205,8 @@
     if (correoEl) correoEl.readOnly = !isAdmin;
     if (estadoEl) estadoEl.disabled = !isAdmin;
     if (observacionAdminEl) observacionAdminEl.readOnly = !isAdmin;
+    if (tallaCasacaEl) tallaCasacaEl.disabled = !isAdmin;
+    if (tallaPantalonEl) tallaPantalonEl.disabled = !isAdmin;
 
     if (btnGuardar) btnGuardar.disabled = !isAdmin;
     if (btnObservar) btnObservar.disabled = !isAdmin;
@@ -231,6 +238,11 @@
 
         await updateDoc(fichaRef, {
         estado: estadoEl.value,
+        personal: {
+            ...(fichaData?.personal || {}),
+            tallaCasaca: tallaCasacaEl?.value || "",
+            tallaPantalon: tallaPantalonEl?.value || ""
+        },
         contacto: {
             ...(fichaData?.contacto || {}),
             correo
@@ -278,6 +290,11 @@
 
         await updateDoc(fichaRef, {
         estado: estadoEl.value,
+        personal: {
+            ...(fichaData?.personal || {}),
+            tallaCasaca: tallaCasacaEl?.value || "",
+            tallaPantalon: tallaPantalonEl?.value || ""
+        },
         contacto: {
             ...(fichaData?.contacto || {}),
             correo

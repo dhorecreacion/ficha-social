@@ -98,8 +98,8 @@
     const allChildren = buildChildrenDataset(rows);
     const totalHijos = allChildren.length;
 
-    const madres = rows.filter(r => hasChildren(r) && isFemale(r)).length;
-    const padres = rows.filter(r => hasChildren(r) && isMale(r)).length;
+    const madres = rows.filter(r => isActive(r) && hasChildren(r) && isFemale(r)).length;
+    const padres = rows.filter(r => isActive(r) && hasChildren(r) && isMale(r)).length;
     const padresMadres = madres + padres;
 
     const hombresConFamiliaList = buildParentsWithFamilyDataset(rows);
@@ -350,7 +350,7 @@
     return rows
         .filter((row) => {
         const partnerName = getPartnerName(row);
-        return isMale(row) && hasChildren(row) && !!partnerName;
+        return isActive(row) && isMale(row) && hasChildren(row) && !!partnerName;
         })
         .map((row) => ({
         id: row.id,
@@ -369,7 +369,7 @@
     return rows
         .filter((row) => {
         const partnerName = getPartnerName(row);
-        return isFemale(row) && hasChildren(row) && !!partnerName;
+        return isActive(row) && isFemale(row) && hasChildren(row) && !!partnerName;
         })
         .map((row) => ({
         id: row.id,
@@ -654,6 +654,13 @@
 
         return String(a[0]).localeCompare(String(b[0]), "es");
     });
+    }
+
+    function isActive(r) {
+    if (r?.meta && Object.prototype.hasOwnProperty.call(r.meta, "activo")) {
+        return r.meta.activo === true;
+    }
+    return true;
     }
 
     function getChildren(row) {

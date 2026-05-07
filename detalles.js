@@ -166,22 +166,27 @@
     $("#nivelAcademico").textContent = r.academica?.nivel || "-";
     $("#profesion").textContent = r.academica?.profesion || "-";
 
-    $("#conyugeNombre").textContent = r.conyuge?.nombre || "-";
-    $("#conyugeNacimiento").textContent = formatFecha(r.conyuge?.nacimiento);
+    const conyugeData = r.familia?.conyuge || r.conyuge || null;
+    const conyugeNombreCompleto = [conyugeData?.nombres, conyugeData?.apellidos].filter(Boolean).join(" ") || conyugeData?.nombre || "-";
+    $("#conyugeNombre").textContent = conyugeNombreCompleto;
+    $("#conyugeNacimiento").textContent = formatFecha(conyugeData?.fechaNacimiento || conyugeData?.nacimiento);
 
-    $("#dependientes").textContent = Array.isArray(r.hijos) ? r.hijos.length : "0";
-    $("#hijos").innerHTML = Array.isArray(r.hijos) && r.hijos.length ? formatHijosHTML(r.hijos) : "-";
+    const hijosData = Array.isArray(r.familia?.hijos) ? r.familia.hijos : Array.isArray(r.hijos) ? r.hijos : [];
+    $("#dependientes").textContent = hijosData.length;
+    $("#hijos").innerHTML = hijosData.length ? formatHijosHTML(hijosData) : "-";
 
-    $("#contactoEmergencia").textContent = r.emergencia?.nombre || "-";
-    $("#parentescoEmergencia").textContent = r.emergencia?.parentesco || "-";
-    $("#telefonoEmergencia").textContent = r.emergencia?.telefono || "-";
+    const emergenciaData = r.familia?.emergencia || r.emergencia || {};
+    $("#contactoEmergencia").textContent = emergenciaData.nombre || "-";
+    $("#parentescoEmergencia").textContent = emergenciaData.parentesco || "-";
+    $("#telefonoEmergencia").textContent = emergenciaData.telefono || "-";
 
+    const enfermedades = r.salud?.enfermedades || r.salud?.enfermedadesCronicas;
     $("#tipoSangre").textContent = r.salud?.tipoSangre || "-";
     $("#alergias").textContent = Array.isArray(r.salud?.alergias) && r.salud.alergias.length
         ? r.salud.alergias.join(", ")
         : "-";
-    $("#enfermedades").textContent = Array.isArray(r.salud?.enfermedadesCronicas) && r.salud.enfermedadesCronicas.length
-        ? r.salud.enfermedadesCronicas.join(", ")
+    $("#enfermedades").textContent = Array.isArray(enfermedades) && enfermedades.length
+        ? enfermedades.join(", ")
         : "-";
     $("#seguros").textContent = formatSeguros(r.salud?.seguros, r.salud?.segurosFechas);
 

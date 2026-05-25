@@ -608,10 +608,12 @@
         const nombre = [h?.nombres, h?.apellidos].filter(Boolean).join(" ") || h?.nombre || "-";
         const fechaRaw = h?.fechaNacimiento || h?.nacimiento;
         const fechaStr = fechaRaw ? formatFecha(fechaRaw) : "";
-        const fechaPart = fechaStr
-        ? ` <span style="color:var(--text-soft);font-weight:400;">(${escAttr(fechaStr)})</span>`
+        const tipo = h?.tipoHijo || "";
+        const meta = [fechaStr, tipo].filter(Boolean).join(" · ");
+        const metaPart = meta
+        ? ` <span style="color:var(--text-soft);font-weight:400;">(${escAttr(meta)})</span>`
         : "";
-        return `<div style="margin-bottom:2px;">${escAttr(nombre)}${fechaPart}</div>`;
+        return `<div style="margin-bottom:2px;">${escAttr(nombre)}${metaPart}</div>`;
     }).join("");
     }
 

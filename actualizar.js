@@ -566,6 +566,15 @@
             <option value="Prefiero no indicar" ${hijo.genero === "Prefiero no indicar" ? "selected" : ""}>Prefiero no indicar</option>
             </select>
         </div>
+
+        <div class="field-group">
+            <label>Tipo de hijo</label>
+            <select class="hijo-tipo">
+            <option value="">Seleccionar</option>
+            <option value="Biológico(a)" ${hijo.tipoHijo === "Biológico(a)" ? "selected" : ""}>Biológico(a)</option>
+            <option value="Hijastro(a)" ${hijo.tipoHijo === "Hijastro(a)" ? "selected" : ""}>Hijastro(a)</option>
+            </select>
+        </div>
         </div>
     `;
 
@@ -609,7 +618,8 @@
         nombres: card.querySelector(".hijo-nombres")?.value.trim() || "",
         apellidos: card.querySelector(".hijo-apellidos")?.value.trim() || "",
         fechaNacimiento: card.querySelector(".hijo-fechaNacimiento")?.value || "",
-        genero: card.querySelector(".hijo-genero")?.value || ""
+        genero: card.querySelector(".hijo-genero")?.value || "",
+        tipoHijo: card.querySelector(".hijo-tipo")?.value || ""
         }))
         .filter((hijo) => hijo.nombres || hijo.apellidos || hijo.fechaNacimiento || hijo.genero);
     }

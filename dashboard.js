@@ -62,11 +62,12 @@
         const snap = await getDocs(qy);
         fichas = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 
+        const fichasActivas = fichas.filter(isActive);
         renderKpisAndMetrics(fichas);
-        renderCharts(fichas);
-        renderChildrenTable(fichas);
-        renderParentsWithFamilyTable(fichas);
-        renderMothersWithFamilyTable(fichas);
+        renderCharts(fichasActivas);
+        renderChildrenTable(fichasActivas);
+        renderParentsWithFamilyTable(fichasActivas);
+        renderMothersWithFamilyTable(fichasActivas);
 
         setMsg("");
     } catch (error) {
@@ -78,7 +79,7 @@
 
     function renderErrorTables() {
     if (tbodyHijos) {
-        tbodyHijos.innerHTML = `<tr><td colspan="9">No se pudo cargar la información.</td></tr>`;
+        tbodyHijos.innerHTML = `<tr><td colspan="10">No se pudo cargar la información.</td></tr>`;
     }
     if (tbodyPadresFamilia) {
     tbodyPadresFamilia.innerHTML = `<tr><td colspan="7">No se pudo cargar la información.</td></tr>`;
@@ -95,7 +96,7 @@
     const revision = rows.filter(r => normalizeEstado(r.estado) === "En revisión").length;
     const observadas = rows.filter(r => normalizeEstado(r.estado) === "Observado").length;
 
-    const allChildren = buildChildrenDataset(rows);
+    const allChildren = buildChildrenDataset(rows.filter(isActive));
     const totalHijos = allChildren.length;
 
     const madres = rows.filter(r => isActive(r) && hasChildren(r) && isFemale(r)).length;
@@ -110,6 +111,10 @@
 
     const proximos12 = allChildren.filter(c => c.near12).length;
     const proximos18 = allChildren.filter(c => c.near18).length;
+
+    const hijosBiologicos  = allChildren.filter(c => c.tipoHijo === "Biológico(a)").length;
+    const hijosHijastros   = allChildren.filter(c => c.tipoHijo === "Hijastro(a)").length;
+    const hijosSinTipo     = allChildren.filter(c => c.tipoHijo === "No especificado").length;
 
     const subidaJuliaca = rows.filter(r => getSubidaGroup(r) === "Subida de Juliaca").length;
     const subidaEspinar = rows.filter(r => getSubidaGroup(r) === "Subida de Espinar").length;
@@ -129,6 +134,10 @@
     setText("mHombresConFamilia", hombresConFamilia);
     setText("mProximos12", proximos12);
     setText("mProximos18", proximos18);
+
+    setText("mHijosBiologicos", hijosBiologicos);
+    setText("mHijosHijastros",  hijosHijastros);
+    setText("mHijosSinTipo",    hijosSinTipo);
 
     setText("mSubidaJuliaca", subidaJuliaca);
     setText("mSubidaEspinar", subidaEspinar);
@@ -218,7 +227,7 @@
         });
 
     if (!children.length) {
-        tbodyHijos.innerHTML = `<tr><td colspan="9">No hay hijos registrados en las fichas.</td></tr>`;
+        tbodyHijos.innerHTML = `<tr><td colspan="10">No hay hijos registrados en las fichas.</td></tr>`;
         return;
     }
 
@@ -231,6 +240,7 @@
         </td>
         <td>${esc(child.ageText)}</td>
         <td>${renderSimpleTag(child.gender)}</td>
+        <td>${renderSimpleTag(child.tipoHijo)}</td>
         <td>${esc(child.birthDateText)}</td>
         <td>
             <div class="person-cell">
@@ -321,6 +331,7 @@
         const age = getAge(birthRaw);
         const gender = normalizeGenero(child?.genero || child?.sexo);
         const birthDateText = formatFecha(birthRaw);
+        const tipoHijo = safeText(child?.tipoHijo) || "No especificado";
 
         const near12Info = getUpcomingMilestoneInfo(birthRaw, 12);
         const near18Info = getUpcomingMilestoneInfo(birthRaw, 18);
@@ -331,6 +342,7 @@
             ageText: age == null ? "No especificado" : `${age} años`,
             gender,
             birthDateText,
+            tipoHijo,
             parentName,
             parentDni,
             parentGender,

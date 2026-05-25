@@ -499,7 +499,8 @@
         `Hijo${i} Apellidos`,
         `Hijo${i} Nacimiento`,
         `Hijo${i} Edad`,
-        `Hijo${i} Género`
+        `Hijo${i} Género`,
+        `Hijo${i} Tipo`
         );
     }
 
@@ -549,9 +550,9 @@
         r.academica?.nivel     || "",
         r.academica?.profesion || "",
         // Emergencia
-        r.emergencia?.nombre     || "",
-        r.emergencia?.telefono   || "",
-        r.emergencia?.parentesco || "",
+        (r.familia?.emergencia?.nombre     || r.emergencia?.nombre     || ""),
+        (r.familia?.emergencia?.telefono   || r.emergencia?.telefono   || ""),
+        (r.familia?.emergencia?.parentesco || r.emergencia?.parentesco || ""),
         // Salud
         r.salud?.tipoSangre || "",
         alergias,
@@ -576,7 +577,8 @@
             h.apellidos || "",
             hNac,
             calcEdad(hNac),
-            h.genero    || ""
+            h.genero    || "",
+            h.tipoHijo  || ""
         );
         }
 

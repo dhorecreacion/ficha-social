@@ -1,4 +1,4 @@
-    import { auth, db } from "./firebase-config.js";
+    import { auth, db, ADMIN_UIDS } from "./firebase-config.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import {
     doc,
@@ -6,11 +6,6 @@
     updateDoc,
     serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const ADMIN_UIDS = new Set([
-    "FWqjOlSz4HOyR7ZDjPCVL6t6iUp2",
-    "bFsNvjtDXyZolGITD5KeZnBpE2B3"
-    ]);
 
     const SEGURO_OPTIONS = [
     "ESSALUD",

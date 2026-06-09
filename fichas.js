@@ -12,12 +12,7 @@
     where
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    import { auth, db } from "./firebase-config.js";
-
-    const ADMIN_UIDS = new Set([
-    "FWqjOlSz4HOyR7ZDjPCVL6t6iUp2",
-    "bFsNvjtDXyZolGITD5KeZnBpE2B3"
-    ]);
+    import { auth, db, ADMIN_UIDS } from "./firebase-config.js";
 
     const $ = (s) => document.querySelector(s);
 

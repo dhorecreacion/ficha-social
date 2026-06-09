@@ -1,10 +1,5 @@
-import { auth } from "./firebase-config.js";
+import { auth, ADMIN_UIDS } from "./firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const ADMIN_UIDS = new Set([
-  "FWqjOlSz4HOyR7ZDjPCVL6t6iUp2",
-  "bFsNvjtDXyZolGITD5KeZnBpE2B3"
-]);
 
 const ADMIN_SESSION_KEY = "adminAuthenticated";
 const WORKER_SESSION_KEY = "colaboradorValidated";

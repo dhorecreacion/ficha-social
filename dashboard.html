@@ -363,6 +363,11 @@
             </div>
 
             <div class="topbar-right">
+                <button class="btn-outline" type="button" id="btnExportSubida">
+                <i class="bi bi-file-earmark-excel" style="margin-right: 8px;"></i>
+                Exportar subidas
+                </button>
+
                 <button class="btn-outline" type="button" id="btnRefresh">
                 <i class="bi bi-arrow-clockwise" style="margin-right: 8px;"></i>
                 Actualizar
@@ -527,6 +532,33 @@
                     <div class="metric-row">
                         <span class="metric-label">Sin tipo registrado</span>
                         <strong class="metric-value" id="mHijosSinTipo">0</strong>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="panel-card">
+                <div class="section-intro">
+                    <div>
+                    <h3>Declaratoria de herederos</h3>
+                    <p>
+                        Seguimiento de la entrega de la declaratoria de herederos por parte del personal activo.
+                    </p>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="metric-list">
+                    <div class="metric-row">
+                        <span class="metric-label">Entregaron declaratoria</span>
+                        <strong class="metric-value" id="mHeredeosEntregaron" style="color:#15803d;">0</strong>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">No han entregado</span>
+                        <strong class="metric-value" id="mHerederosPendientes" style="color:#b91c1c;">0</strong>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Total fichas activas</span>
+                        <strong class="metric-value" id="mHererosTotal">0</strong>
                     </div>
                     </div>
                 </div>
@@ -811,6 +843,7 @@
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
     <script type="module" src="auth-guard.js?v=2"></script>
     <script type="module" src="logout.js?v=2"></script>
     <script type="module" src="dashboard.js?v=2"></script>

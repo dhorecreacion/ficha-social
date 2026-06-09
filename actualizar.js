@@ -219,6 +219,21 @@
     el.textContent = "Inactiva";
     }
 
+    function renderHererosBadge(entrego) {
+    const el = $("#badgeHerederos");
+    if (!el) return;
+
+    if (entrego) {
+        el.style.background = "#dcfce7";
+        el.style.color = "#15803d";
+        el.textContent = "Dec. herederos: ✓ Entregó";
+    } else {
+        el.style.background = "#fee2e2";
+        el.style.color = "#b91c1c";
+        el.textContent = "Dec. herederos: Pendiente";
+    }
+    }
+
     function escapeHtml(value) {
     return String(value || "")
         .replaceAll("&", "&amp;")
@@ -789,6 +804,7 @@
 
     renderEstadoBadge(estado);
     renderActivoBadge(activo);
+    renderHererosBadge(getNested(ficha, ["meta.declaracionHerederos"], false) === true);
 
     // Pre-marcar ambas declaraciones si ya fueron aceptadas anteriormente (1 solo campo Firebase)
     const yaAcepto = getNested(ficha, ["meta.declaracionDatos"], false) === true;

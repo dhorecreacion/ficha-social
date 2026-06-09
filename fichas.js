@@ -29,6 +29,7 @@
     const filtroEstado = $("#fltEstado");
     const filtroRevision = $("#fltRevision");
     const filtroDeclaracion = $("#fltDeclaracion");
+    const filtroHerederos   = $("#fltHerederos");
     const msg = $("#msg");
 
     const kpiTotal = $("#kpiTotal");
@@ -83,6 +84,7 @@
 
     btnExport?.addEventListener("click", exportXLSX);
     filtroDeclaracion?.addEventListener("change", render);
+    filtroHerederos?.addEventListener("change", render);
 
     inputNuevoDni?.addEventListener("input", () => {
         inputNuevoDni.value = inputNuevoDni.value.replace(/\D/g, "").slice(0, 8);
@@ -158,12 +160,16 @@
         }
 
         setMsg(human(e));
-        tbody.innerHTML = "<tr><td colspan='8'>No se pudieron cargar las fichas.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='9'>No se pudieron cargar las fichas.</td></tr>";
     }
     }
 
     function hasDeclaracion(r) {
     return r?.meta?.declaracionDatos === true;
+    }
+
+    function hasDeclaracionHerederos(r) {
+    return r?.meta?.declaracionHerederos === true;
     }
 
     function updateKpis() {
@@ -192,7 +198,8 @@
     const term = (search?.value || "").trim().toLowerCase();
     const est = readEstadoFilter();
     const rev = readRevisionFilter();
-    const decl = (filtroDeclaracion?.value || "all").trim().toLowerCase();
+    const decl      = (filtroDeclaracion?.value || "all").trim().toLowerCase();
+    const herederos = (filtroHerederos?.value   || "all").trim().toLowerCase();
 
     return rows.filter((r) => {
         if (est === "act" && !isActive(r)) return false;
@@ -203,6 +210,9 @@
 
         if (decl === "si" && !hasDeclaracion(r)) return false;
         if (decl === "no" && hasDeclaracion(r)) return false;
+
+        if (herederos === "si" && !hasDeclaracionHerederos(r)) return false;
+        if (herederos === "no" && hasDeclaracionHerederos(r)) return false;
 
         if (term) {
         const dni = (r.personal?.doc || r.doc || "").toString().toLowerCase();
@@ -261,7 +271,7 @@
     const data = getFiltered();
 
     if (!data.length) {
-        tbody.innerHTML = "<tr><td colspan='8'>Sin resultados</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='9'>Sin resultados</td></tr>";
         return;
     }
 
@@ -285,6 +295,10 @@
         ? `<span class="badge" style="background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;">&#10003; Aceptada</span>`
         : `<span class="badge" style="background:#fef9c3;color:#92400e;border:1px solid #fde68a;">Pendiente</span>`;
 
+        const herederosBadge = hasDeclaracionHerederos(r)
+        ? `<span class="badge" style="background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;">&#10003; Entregó</span>`
+        : `<span class="badge" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;">No entregó</span>`;
+
         return `
         <tr>
             <td>${esc(dni)}</td>
@@ -306,6 +320,7 @@
             <td>${renderEstadoBadge(estado)}</td>
             <td>${situacion}</td>
             <td>${declaracionBadge}</td>
+            <td>${herederosBadge}</td>
 
             <td class="text-end" style="white-space:nowrap">
             <div class="action-row">

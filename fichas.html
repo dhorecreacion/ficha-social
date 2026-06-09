@@ -324,6 +324,15 @@
                     </select>
                     </div>
 
+                    <div class="field-group">
+                    <label for="fltHerederos">Dec. herederos</label>
+                    <select id="fltHerederos" class="field-control">
+                        <option value="all" selected>Todas</option>
+                        <option value="si">Entregó</option>
+                        <option value="no">No entregó</option>
+                    </select>
+                    </div>
+
                     <div class="field-actions">
                     <button class="btn-primary" id="btnFiltrar" type="button">Filtrar</button>
                     </div>
@@ -348,12 +357,13 @@
                         <th>Estado ficha</th>
                         <th>Situación</th>
                         <th>Declaración</th>
+                        <th>Dec. herederos</th>
                         <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr>
-                        <td colspan="8">Cargando…</td>
+                        <td colspan="9">Cargando…</td>
                         </tr>
                     </tbody>
                     </table>

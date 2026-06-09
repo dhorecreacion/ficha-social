@@ -45,8 +45,11 @@
     await loadDashboard();
     });
 
+    const btnExportSubida = $("#btnExportSubida");
+
     function bindEvents() {
     btnRefresh?.addEventListener("click", loadDashboard);
+    btnExportSubida?.addEventListener("click", exportSubidas);
     }
 
     async function loadDashboard() {
@@ -77,6 +80,68 @@
     }
     }
 
+    function exportSubidas() {
+    if (typeof XLSX === "undefined") {
+        alert("La librería de Excel no está disponible. Recarga la página.");
+        return;
+    }
+
+    const activas = fichas.filter(isActive);
+    if (!activas.length) {
+        alert("No hay fichas activas para exportar.");
+        return;
+    }
+
+    const GRUPOS = [
+        "Subida de Juliaca",
+        "Subida de Espinar",
+        "Subida de Arequipa (Caylloma)",
+        "Subida de Arequipa (Otros)"
+    ];
+
+    const HEADERS = ["DNI", "Apellidos", "Nombres", "Nombre completo", "Género", "Sede", "Cargo", "Área", "Correo", "Teléfono", "Departamento", "Provincia", "Distrito"];
+
+    const wb = XLSX.utils.book_new();
+
+    GRUPOS.forEach((grupo) => {
+        const personas = activas.filter(r => getSubidaGroup(r) === grupo);
+
+        const rows_xlsx = personas.map(r => {
+        const nombres   = safeText(r.personal?.nombres);
+        const apellidos = safeText(r.personal?.apellidos);
+        return [
+            safeText(r.personal?.doc),
+            apellidos,
+            nombres,
+            `${apellidos} ${nombres}`.trim(),
+            safeText(r.personal?.genero),
+            safeText(r.laboral?.sede),
+            safeText(r.laboral?.cargo),
+            safeText(r.laboral?.area),
+            safeText(r.contacto?.correo),
+            safeText(r.contacto?.telefono),
+            safeText(r.ubicacion?.departamento),
+            safeText(r.ubicacion?.provincia),
+            safeText(r.ubicacion?.distrito)
+        ];
+        });
+
+        const aoa = [HEADERS, ...rows_xlsx];
+        const ws  = XLSX.utils.aoa_to_sheet(aoa);
+
+        ws["!cols"] = HEADERS.map(h => ({
+        wch: ["Nombre completo", "Correo"].includes(h) ? 30 : 18
+        }));
+        ws["!autofilter"] = { ref: ws["!ref"] };
+
+        const sheetName = grupo.replace(/[:\\/?*\[\]]/g, "").slice(0, 31);
+        XLSX.utils.book_append_sheet(wb, ws, sheetName);
+    });
+
+    const filename = `subidas-${new Date().toISOString().slice(0, 10)}.xlsx`;
+    XLSX.writeFile(wb, filename);
+    }
+
     function renderErrorTables() {
     if (tbodyHijos) {
         tbodyHijos.innerHTML = `<tr><td colspan="10">No se pudo cargar la información.</td></tr>`;
@@ -92,19 +157,20 @@
 
     function renderKpisAndMetrics(rows) {
     const total = rows.length;
-    const aprobadas = rows.filter(r => normalizeEstado(r.estado) === "Aprobado").length;
-    const revision = rows.filter(r => normalizeEstado(r.estado) === "En revisión").length;
-    const observadas = rows.filter(r => normalizeEstado(r.estado) === "Observado").length;
+    const activas = rows.filter(isActive);
+    const aprobadas = activas.filter(r => normalizeEstado(r.estado) === "Aprobado").length;
+    const revision  = activas.filter(r => normalizeEstado(r.estado) === "En revisión").length;
+    const observadas = activas.filter(r => normalizeEstado(r.estado) === "Observado").length;
 
-    const allChildren = buildChildrenDataset(rows.filter(isActive));
+    const allChildren = buildChildrenDataset(activas);
     const totalHijos = allChildren.length;
 
-    const madres = rows.filter(r => isActive(r) && hasChildren(r) && isFemale(r)).length;
-    const padres = rows.filter(r => isActive(r) && hasChildren(r) && isMale(r)).length;
+    const madres = activas.filter(r => hasChildren(r) && isFemale(r)).length;
+    const padres = activas.filter(r => hasChildren(r) && isMale(r)).length;
     const padresMadres = madres + padres;
 
-    const hombresConFamiliaList = buildParentsWithFamilyDataset(rows);
-    const mujeresConFamiliaList = buildMothersWithFamilyDataset(rows);
+    const hombresConFamiliaList = buildParentsWithFamilyDataset(activas);
+    const mujeresConFamiliaList = buildMothersWithFamilyDataset(activas);
 
     const hombresConFamilia = hombresConFamiliaList.length;
     const mujeresConFamilia = mujeresConFamiliaList.length;
@@ -116,10 +182,10 @@
     const hijosHijastros   = allChildren.filter(c => c.tipoHijo === "Hijastro(a)").length;
     const hijosSinTipo     = allChildren.filter(c => c.tipoHijo === "No especificado").length;
 
-    const subidaJuliaca = rows.filter(r => getSubidaGroup(r) === "Subida de Juliaca").length;
-    const subidaEspinar = rows.filter(r => getSubidaGroup(r) === "Subida de Espinar").length;
-    const subidaArequipaCaylloma = rows.filter(r => getSubidaGroup(r) === "Subida de Arequipa (Caylloma)").length;
-    const subidaArequipaOtros = rows.filter(r => getSubidaGroup(r) === "Subida de Arequipa (Otros)").length;
+    const subidaJuliaca          = activas.filter(r => getSubidaGroup(r) === "Subida de Juliaca").length;
+    const subidaEspinar          = activas.filter(r => getSubidaGroup(r) === "Subida de Espinar").length;
+    const subidaArequipaCaylloma = activas.filter(r => getSubidaGroup(r) === "Subida de Arequipa (Caylloma)").length;
+    const subidaArequipaOtros    = activas.filter(r => getSubidaGroup(r) === "Subida de Arequipa (Otros)").length;
 
     setText("kpiTotal", total);
     setText("kpiAprobadas", aprobadas);
@@ -138,6 +204,12 @@
     setText("mHijosBiologicos", hijosBiologicos);
     setText("mHijosHijastros",  hijosHijastros);
     setText("mHijosSinTipo",    hijosSinTipo);
+
+    const heredeosEntregaron  = activas.filter(r => r?.meta?.declaracionHerederos === true).length;
+    const herederosPendientes = activas.length - heredeosEntregaron;
+    setText("mHeredeosEntregaron",  heredeosEntregaron);
+    setText("mHerederosPendientes", herederosPendientes);
+    setText("mHererosTotal",        activas.length);
 
     setText("mSubidaJuliaca", subidaJuliaca);
     setText("mSubidaEspinar", subidaEspinar);

@@ -35,6 +35,7 @@
     const segurosAdminCard = $("#segurosAdminCard");
     const tallaCasacaEl = $("#tallaCasaca");
     const tallaPantalonEl = $("#tallaPantalon");
+    const chkDeclaracionHerederos = $("#chkDeclaracionHerederos");
 
     const params = new URLSearchParams(window.location.search);
     const fichaId = params.get("id");
@@ -147,6 +148,7 @@
 
     if (tallaCasacaEl) tallaCasacaEl.value = r.personal?.tallaCasaca || "";
     if (tallaPantalonEl) tallaPantalonEl.value = r.personal?.tallaPantalon || "";
+    if (chkDeclaracionHerederos) chkDeclaracionHerederos.checked = r.meta?.declaracionHerederos === true;
 
     $("#estadoCivil").textContent = r.personal?.estadoCivil || "-";
     $("#telefono").textContent = r.contacto?.telefono || "-";
@@ -212,6 +214,7 @@
     if (observacionAdminEl) observacionAdminEl.readOnly = !isAdmin;
     if (tallaCasacaEl) tallaCasacaEl.disabled = !isAdmin;
     if (tallaPantalonEl) tallaPantalonEl.disabled = !isAdmin;
+    if (chkDeclaracionHerederos) chkDeclaracionHerederos.disabled = !isAdmin;
 
     if (btnGuardar) btnGuardar.disabled = !isAdmin;
     if (btnObservar) btnObservar.disabled = !isAdmin;
@@ -260,6 +263,10 @@
         admin: {
             ...(fichaData?.admin || {}),
             observacion: observacionAdminEl.value.trim()
+        },
+        meta: {
+            ...(fichaData?.meta || {}),
+            declaracionHerederos: chkDeclaracionHerederos?.checked === true
         },
         updatedAt: serverTimestamp()
         });
@@ -312,6 +319,10 @@
         admin: {
             ...(fichaData?.admin || {}),
             observacion: observacionAdminEl.value.trim()
+        },
+        meta: {
+            ...(fichaData?.meta || {}),
+            declaracionHerederos: chkDeclaracionHerederos?.checked === true
         },
         updatedAt: serverTimestamp()
         });

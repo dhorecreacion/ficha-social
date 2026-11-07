@@ -462,12 +462,21 @@
     // Calcula la edad en años a partir de "YYYY-MM-DD"
     function calcEdad(nacStr) {
         if (!nacStr) return "";
-        const nac = new Date(nacStr);
-        if (isNaN(nac)) return "";
+        // Leer Y-M-D directamente del texto para evitar el desfase UTC
+        // (new Date("YYYY-MM-DD") se interpreta como UTC y en Perú cae el día anterior)
+        let y, mo, d;
+        const iso = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(nacStr));
+        if (iso) {
+            y = +iso[1]; mo = +iso[2] - 1; d = +iso[3];
+        } else {
+            const nac = new Date(nacStr);
+            if (isNaN(nac)) return "";
+            y = nac.getFullYear(); mo = nac.getMonth(); d = nac.getDate();
+        }
         const hoy = new Date();
-        let age = hoy.getFullYear() - nac.getFullYear();
-        const m = hoy.getMonth() - nac.getMonth();
-        if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) age--;
+        let age = hoy.getFullYear() - y;
+        const m = hoy.getMonth() - mo;
+        if (m < 0 || (m === 0 && hoy.getDate() < d)) age--;
         return age;
     }
 

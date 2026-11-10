@@ -268,7 +268,11 @@
     $("#conyugeNombre").textContent = conyugeNombreCompleto;
     $("#conyugeNacimiento").textContent = formatFecha(conyugeData?.fechaNacimiento || conyugeData?.nacimiento);
 
-    const hijosData = Array.isArray(r.familia?.hijos) ? r.familia.hijos : Array.isArray(r.hijos) ? r.hijos : [];
+    // Los hijos están en dos lugares (familia.hijos e hijos): usar el que tenga datos
+    const aListaHijos = (v) => Array.isArray(v) ? v.filter(Boolean)
+        : (v && typeof v === "object") ? Object.values(v).filter(Boolean) : [];
+    const hijosFamilia = aListaHijos(r.familia?.hijos);
+    const hijosData = hijosFamilia.length ? hijosFamilia : aListaHijos(r.hijos);
     $("#dependientes").textContent = hijosData.length;
     $("#hijos").innerHTML = hijosData.length ? formatHijosHTML(hijosData) : "-";
 
@@ -709,7 +713,9 @@
         return value.toDate().toLocaleDateString("es-PE");
         }
 
-        const d = new Date(value);
+        // "YYYY-MM-DD" se toma como fecha local (new Date la leería en UTC y saldría el día anterior)
+        const iso = typeof value === "string" ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim()) : null;
+        const d = iso ? new Date(+iso[1], +iso[2] - 1, +iso[3]) : new Date(value);
         if (isNaN(d.getTime())) return "-";
 
         return d.toLocaleDateString("es-PE");

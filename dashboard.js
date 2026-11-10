@@ -120,9 +120,9 @@
             safeText(r.laboral?.area),
             safeText(r.contacto?.correo),
             safeText(r.contacto?.telefono),
-            safeText(r.ubicacion?.departamento),
-            safeText(r.ubicacion?.provincia),
-            safeText(r.ubicacion?.distrito)
+            safeText(getUbicacion(r, "departamento")),
+            safeText(getUbicacion(r, "provincia")),
+            safeText(getUbicacion(r, "distrito"))
         ];
         });
 
@@ -138,7 +138,14 @@
         XLSX.utils.book_append_sheet(wb, ws, sheetName);
     });
 
-    const filename = `subidas-${new Date().toISOString().slice(0, 10)}.xlsx`;
+    // Fecha local (no UTC) para que el nombre no salte al día siguiente por la noche
+    const hoyArchivo = new Date();
+    const fechaArchivo = [
+        hoyArchivo.getFullYear(),
+        String(hoyArchivo.getMonth() + 1).padStart(2, "0"),
+        String(hoyArchivo.getDate()).padStart(2, "0")
+    ].join("-");
+    const filename = `subidas-${fechaArchivo}.xlsx`;
     XLSX.writeFile(wb, filename);
     }
 
@@ -263,7 +270,7 @@
     renderChart(
         "chartDepartamento",
         "bar",
-        countBy(rows, r => normalizeText(r.ubicacion?.departamento)),
+        countBy(rows, r => normalizeText(getUbicacion(r, "departamento"))),
         { horizontal: true }
     );
 
@@ -398,7 +405,8 @@
         const sede = normalizeText(row.laboral?.sede);
 
         getChildren(row).forEach((child) => {
-        const childName = safeText(child?.nombre || child?.nombres || child?.fullName);
+        const childName = [safeText(child?.nombre || child?.nombres || child?.fullName), safeText(child?.apellidos)]
+            .filter(Boolean).join(" ");
         const birthRaw = child?.nacimiento || child?.fechaNacimiento || child?.birthDate;
         const age = getAge(birthRaw);
         const gender = normalizeGenero(child?.genero || child?.sexo);
@@ -747,10 +755,12 @@
     return true;
     }
 
+    // Los hijos están en dos lugares (familia.hijos e hijos): usar el que tenga datos
     function getChildren(row) {
-    if (Array.isArray(row?.hijos)) return row.hijos.filter(Boolean);
-    if (Array.isArray(row?.familia?.hijos)) return row.familia.hijos.filter(Boolean);
-    return [];
+    const aLista = (v) => Array.isArray(v) ? v.filter(Boolean)
+        : (v && typeof v === "object") ? Object.values(v).filter(Boolean) : [];
+    const a = aLista(row?.familia?.hijos);
+    return a.length ? a : aLista(row?.hijos);
     }
 
     function hasChildren(row) {
@@ -784,18 +794,17 @@
     return "";
     }
 
-    function getSubidaGroup(row) {
-    const dept = normalizeDepartamento(
-        row?.ubicacion?.departamento ||
-        row?.direccion?.departamento ||
-        row?.personal?.departamento
-    );
+    // El formulario guarda la ubicación en "contacto"; fichas antiguas pueden tenerla en otros bloques
+    function getUbicacion(row, campo) {
+    return safeText(row?.ubicacion?.[campo])
+        || safeText(row?.contacto?.[campo])
+        || safeText(row?.direccion?.[campo])
+        || safeText(row?.personal?.[campo]);
+    }
 
-    const prov = normalizeProvincia(
-        row?.ubicacion?.provincia ||
-        row?.direccion?.provincia ||
-        row?.personal?.provincia
-    );
+    function getSubidaGroup(row) {
+    const dept = normalizeDepartamento(getUbicacion(row, "departamento"));
+    const prov = normalizeProvincia(getUbicacion(row, "provincia"));
 
     if (dept === "Puno") return "Subida de Juliaca";
     if (dept === "Cusco") return "Subida de Espinar";
@@ -978,6 +987,10 @@
     try {
         if (!value) return null;
         if (typeof value?.toDate === "function") return value.toDate();
+
+        // "YYYY-MM-DD" se toma como fecha local (new Date la leería en UTC y saldría el día anterior)
+        const iso = typeof value === "string" ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim()) : null;
+        if (iso) return new Date(+iso[1], +iso[2] - 1, +iso[3]);
 
         const d = new Date(value);
         if (isNaN(d.getTime())) return null;

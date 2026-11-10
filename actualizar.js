@@ -865,9 +865,10 @@
     const estadoAnterior = String(getNested(fichaActual, ["estado"], "") || "").toLowerCase().trim();
 
     let nuevoEstado = getNested(fichaActual, ["estado"], "borrador");
-    if (estadoAnterior === "observado" || estadoAnterior === "en revisión" || estadoAnterior === "revision") {
+    if (estadoAnterior === "observado" || estadoAnterior === "en revisión" || estadoAnterior === "en revision" || estadoAnterior === "revision") {
         nuevoEstado = "subsanado";
-    } else if (!estadoAnterior) {
+    } else if (!estadoAnterior || estadoAnterior === "borrador") {
+        // Las fichas nacen como "borrador": al guardar el colaborador pasan a "enviado"
         nuevoEstado = "enviado";
     }
 
@@ -900,7 +901,8 @@
         contacto: {
         ...(fichaActual?.contacto || {}),
         telefono: $("#telefono")?.value.trim() || "",
-        correo: $("#correo")?.value.trim() || "",
+        // En minúsculas: el login busca el correo así
+        correo: $("#correo")?.value.trim().toLowerCase() || "",
         direccion: $("#direccion")?.value.trim() || "",
         referencia: $("#referencia")?.value.trim() || "",
         departamento: $("#selDep")?.value || "",

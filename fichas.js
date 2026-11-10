@@ -480,10 +480,20 @@
         return age;
     }
 
+    // Tallas de pantalón antiguas (letras) → numéricas, igual que en detalles/actualizar
+    const TALLA_PANTALON_LEGACY = { XS:"26", S:"28", M:"30", L:"32", XL:"34", XXL:"36", XXXL:"38" };
+
+    // Los hijos están en dos lugares (familia.hijos e hijos): usar el que tenga datos
+    function listaHijos(r) {
+        const aLista = (v) => Array.isArray(v) ? v.filter(Boolean)
+            : (v && typeof v === "object") ? Object.values(v).filter(Boolean) : [];
+        const a = aLista(r?.familia?.hijos);
+        return a.length ? a : aLista(r?.hijos);
+    }
+
     // Determina cuántos hijos tiene el colaborador con más hijos
     const maxHijos = data.reduce((mx, r) => {
-        const h = Array.isArray(r.hijos) ? r.hijos : Array.isArray(r.familia?.hijos) ? r.familia.hijos : [];
-        return Math.max(mx, h.length);
+        return Math.max(mx, listaHijos(r).length);
     }, 0);
 
     // Cabecera fija
@@ -535,7 +545,7 @@
         const nombres   = r.personal?.nombres   || "";
         const apellidos = r.personal?.apellidos || "";
         const nacStr    = r.personal?.nacimiento || "";
-        const hijos     = Array.isArray(r.hijos) ? r.hijos : Array.isArray(r.familia?.hijos) ? r.familia.hijos : [];
+        const hijos     = listaHijos(r);
         const seguros   = Array.isArray(r.salud?.seguros) ? r.salud.seguros.join(", ") : "";
         const alergias  = Array.isArray(r.salud?.alergias) ? r.salud.alergias.join(", ") : "";
         const enfArr    = r.salud?.enfermedades || r.salud?.enfermedadesCronicas || [];
@@ -554,7 +564,7 @@
         r.personal?.estadoCivil || "",
         r.personal?.nacionalidadOtra || r.personal?.nacionalidad || "",
         r.personal?.tallaCasaca   || "",
-        r.personal?.tallaPantalon || "",
+        TALLA_PANTALON_LEGACY[r.personal?.tallaPantalon] || r.personal?.tallaPantalon || "",
         // Contacto
         r.contacto?.correo    || "",
         r.contacto?.telefono  || "",
@@ -640,10 +650,74 @@
     // AutoFiltro en toda la cabecera
     ws["!autofilter"] = { ref: ws["!ref"] };
 
+    // ── Estilos (requiere xlsx-js-style; con la librería xlsx normal se ignoran) ──
+    // Un color de cabecera por sección: [color, nº de columnas], en el orden de FIXED_HEADERS
+    const SECCIONES = [
+        ["1F4E79", 4],  // Identificación
+        ["2E75B6", 7],  // Personal
+        ["2E7D32", 2],  // Contacto
+        ["B7791F", 5],  // Ubicación
+        ["6A1B9A", 7],  // Laboral
+        ["C55A11", 2],  // Académico
+        ["C62828", 3],  // Emergencia
+        ["00838F", 4],  // Salud
+        ["AD1457", 6],  // Cónyuge
+        ["33691E", 2],  // Hijos resumen
+        ["546E7A", 3]   // Estado
+    ];
+    const HIJO_COLORES = ["1565C0", "00897B"]; // se alternan por cada hijo
+    const COLS_POR_HIJO = 6;
+
+    const colorCol = [];
+    SECCIONES.forEach(([color, n]) => { for (let i = 0; i < n; i++) colorCol.push(color); });
+    for (let i = 0; i < maxHijos; i++) {
+        for (let j = 0; j < COLS_POR_HIJO; j++) colorCol.push(HIJO_COLORES[i % 2]);
+    }
+
+    const bordeFino = (rgb) => {
+        const b = { style: "thin", color: { rgb } };
+        return { top: b, bottom: b, left: b, right: b };
+    };
+
+    headers.forEach((h, c) => {
+        const esCentrada = h === "Edad" || h.endsWith(" Edad") || h === "Nro. hijos" || h === "Tiene hijos";
+
+        for (let f = 0; f < aoa.length; f++) {
+        const ref = XLSX.utils.encode_cell({ r: f, c });
+        if (!ws[ref]) ws[ref] = { t: "s", v: "" };
+
+        if (f === 0) {
+            ws[ref].s = {
+            font: { bold: true, color: { rgb: "FFFFFF" }, sz: 11 },
+            fill: { patternType: "solid", fgColor: { rgb: colorCol[c] || "1F4E79" } },
+            alignment: { horizontal: "center", vertical: "center", wrapText: true },
+            border: bordeFino("FFFFFF")
+            };
+        } else {
+            ws[ref].s = {
+            font: { sz: 10, color: { rgb: "1F2933" } },
+            fill: { patternType: "solid", fgColor: { rgb: f % 2 === 0 ? "F3F6FA" : "FFFFFF" } },
+            alignment: { horizontal: esCentrada ? "center" : "left", vertical: "center" },
+            border: bordeFino("D9DEE5")
+            };
+        }
+        }
+    });
+
+    // Cabecera más alta para que respire
+    ws["!rows"] = [{ hpt: 34 }];
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Fichas");
 
-    const filename = `fichas-${new Date().toISOString().slice(0, 10)}.xlsx`;
+    // Fecha local (no UTC) para que el nombre no salte al día siguiente por la noche
+    const hoyArchivo = new Date();
+    const fechaArchivo = [
+        hoyArchivo.getFullYear(),
+        String(hoyArchivo.getMonth() + 1).padStart(2, "0"),
+        String(hoyArchivo.getDate()).padStart(2, "0")
+    ].join("-");
+    const filename = `fichas-${fechaArchivo}.xlsx`;
     XLSX.writeFile(wb, filename);
     }
 
